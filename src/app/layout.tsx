@@ -71,8 +71,35 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
-  if (!env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
-    return (
+  // if (!env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
+  //   return (
+  //     <html lang="en" suppressHydrationWarning>
+  //       <head />
+  //       <body
+  //         className={cn(
+  //           "min-h-screen bg-background font-sans antialiased",
+  //           GeistSans.variable,
+  //           GeistMono.variable,
+  //           fontHeading.variable,
+  //         )}
+  //       >
+  //         <ThemeProvider
+  //           attribute="class"
+  //           defaultTheme="system"
+  //           enableSystem
+  //           disableTransitionOnChange
+  //         >
+  //           {children}
+  //           <TailwindIndicator />
+  //           <Analytics />
+  //         </ThemeProvider>
+  //         <Toaster />
+  //       </body>
+  //     </html>
+  //   );
+  // } else
+  return (
+    <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <head />
         <body
@@ -96,33 +123,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <Toaster />
         </body>
       </html>
-    );
-  } else
-    return (
-      <ClerkProvider>
-        <html lang="en" suppressHydrationWarning>
-          <head />
-          <body
-            className={cn(
-              "min-h-screen bg-background font-sans antialiased",
-              GeistSans.variable,
-              GeistMono.variable,
-              fontHeading.variable,
-            )}
-          >
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              {children}
-              <TailwindIndicator />
-              <Analytics />
-            </ThemeProvider>
-            <Toaster />
-          </body>
-        </html>
-      </ClerkProvider>
-    );
+    </ClerkProvider>
+  );
 }

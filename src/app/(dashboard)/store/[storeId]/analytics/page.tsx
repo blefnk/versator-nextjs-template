@@ -159,14 +159,14 @@ export default async function AnalyticsPage({
               Total sales in the last {dayCount} days
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          {/* <CardContent>
             <SalesChart
               data={sales.map((sale) => ({
                 name: format(new Date(sale.year, sale.month - 1), "MMM"),
                 Total: sale.totalSales,
               }))}
             />
-          </CardContent>
+          </CardContent> */}
         </Card>
         <Card>
           <CardHeader>

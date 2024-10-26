@@ -4,11 +4,6 @@ Versator is an open-source e-commerce platform built with the latest features in
 
 [![Versator](./public/images/screenshot.png)](https://versator.vercel.app/)
 
-> **Warning**
-> This project is still in development and is not ready for production use.
->
-> It uses new technologies (drizzle ORM) which are subject to change and may break your application.
-
 ## Tech Stack
 
 - **Framework:** [Next.js](https://nextjs.org)

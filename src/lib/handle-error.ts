@@ -7,7 +7,8 @@ import { unknownError } from "~/lib/constants";
 export function getErrorMessage(err: unknown) {
   if (err instanceof z.ZodError) {
     return err.errors[0]?.message ?? unknownError;
-  } else if (isClerkAPIResponseError(err)) {
+  } else if (typeof window !== "undefined" && isClerkAPIResponseError(err)) {
+    // Check for client-side environment before using `isClerkAPIResponseError`
     return err.errors[0]?.longMessage ?? unknownError;
   } else if (err instanceof Error) {
     return err.message;

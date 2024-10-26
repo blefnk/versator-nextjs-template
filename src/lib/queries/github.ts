@@ -6,7 +6,7 @@ export async function getGithubStars() {
   return await cache(
     async () => {
       const response = await fetch(
-        "https://api.github.com/repos/blefnk/versator",
+        "https://api.github.com/repos/blefnk/relivator-nextjs-template",
         {
           headers: {
             Accept: "application/vnd.github+json",

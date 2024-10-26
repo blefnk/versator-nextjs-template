@@ -6,17 +6,17 @@ import { slugify } from "~/lib/utils";
 export type SiteConfig = typeof siteConfig;
 
 const links = {
-  x: "https://twitter.com/blefnk",
-  github: "https://github.com/blefnk/versator",
+  x: "https://x.com/blefnk",
+  github: "https://github.com/blefnk/relivator-nextjs-template",
   githubAccount: "https://github.com/blefnk",
-  discord: "https://discord.com/users/blefnk",
+  discord: "https://discord.gg/Pb8uKbwpsJ",
   calDotCom: "https://cal.com/blefnk",
 };
 
 export const siteConfig = {
   name: "Versator",
   description:
-    "An open source e-commerce versator build with everything new in Next.js.",
+    "An open source e-commerce shop built with everything new in Next.js",
   url: "https://versator.vercel.app",
   ogImage: "https://versator.vercel.app/opengraph-image.png",
   links,
@@ -28,6 +28,12 @@ export const siteConfig = {
           title: "Products",
           href: "/products",
           description: "All the products we have to offer.",
+          items: [],
+        },
+        {
+          title: "Stores",
+          href: "/stores",
+          description: "Discover our stores and their products",
           items: [],
         },
         {
@@ -63,36 +69,6 @@ export const siteConfig = {
     })),
   ] satisfies MainNavItem[],
   footerNav: [
-    {
-      title: "Credits",
-      items: [
-        {
-          title: "OneStopShop",
-          href: "https://onestopshop.jackblatch.com",
-          external: true,
-        },
-        {
-          title: "Acme Corp",
-          href: "https://acme-corp.jumr.dev",
-          external: true,
-        },
-        {
-          title: "craft.mxkaske.dev",
-          href: "https://craft.mxkaske.dev",
-          external: true,
-        },
-        {
-          title: "Taxonomy",
-          href: "https://tx.shadcn.com/",
-          external: true,
-        },
-        {
-          title: "shadcn/ui",
-          href: "https://ui.shadcn.com",
-          external: true,
-        },
-      ],
-    },
     {
       title: "Help",
       items: [

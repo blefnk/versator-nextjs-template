@@ -107,7 +107,7 @@ export function StoreSwitcher({
                       setOpen(false);
                       pathname.includes(store.id)
                         ? router.replace(pathname.replace(storeId, store.id))
-                        : router.push(`/dashboard/stores/${store.id}`);
+                        : router.push(`/store/${store.id}`);
                     }}
                     className="text-sm"
                   >

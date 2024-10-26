@@ -12,6 +12,7 @@ import { storesProductsSearchParamsSchema } from "~/lib/validations/params";
 import { DataTableSkeleton } from "~/components/data-table/data-table-skeleton";
 import { DateRangePicker } from "~/components/date-range-picker";
 import { ProductsTable } from "~/components/tables/products-table";
+import { AlertCard } from "~/components/alert-card";
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
@@ -158,6 +159,7 @@ export default async function ProductsPage({
       {/* <React.Suspense fallback={<DataTableSkeleton columnCount={6} />}>
         <ProductsTable promise={productsPromise} storeId={storeId} />
       </React.Suspense> */}
+      <AlertCard />
     </div>
   );
 }

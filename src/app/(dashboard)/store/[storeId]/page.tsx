@@ -23,6 +23,7 @@ import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import { ConnectStoreToStripeButton } from "~/components/connect-store-to-stripe-button";
 import { LoadingButton } from "~/components/loading-button";
+import { AlertCard } from "~/components/alert-card";
 
 interface DashboardStorePageProps {
   params: {
@@ -171,7 +172,8 @@ export default async function DashboardStorePage({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form
+          <AlertCard />
+          {/* <form
             onSubmit={async (e) => {
               e.preventDefault();
               const formData = new FormData(e.currentTarget);
@@ -209,18 +211,19 @@ export default async function DashboardStorePage({
                 Update store
                 <span className="sr-only">Update store</span>
               </LoadingButton>
-              {/* <LoadingButton
-                formAction={deleteStore.bind(null, store.id)}
-                variant="destructive"
-                action="delete"
-              >
-                Delete store
-                <span className="sr-only">Delete store</span>
-              </LoadingButton> */}
             </div>
-          </form>
+          </form> */}
         </CardContent>
       </Card>
     </div>
   );
 }
+
+// <LoadingButton
+//   formAction={deleteStore.bind(null, store.id)}
+//   variant="destructive"
+//   action="delete"
+// >
+//   Delete store
+//   <span className="sr-only">Delete store</span>
+// </LoadingButton>

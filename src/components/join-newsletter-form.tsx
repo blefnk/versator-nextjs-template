@@ -85,7 +85,7 @@ export function JoinNewsletterForm() {
               <FormLabel className="sr-only">Email</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="skate@gmail.com"
+                  placeholder="your.email@example.com"
                   className="pr-12"
                   {...field}
                 />

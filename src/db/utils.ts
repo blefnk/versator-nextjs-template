@@ -13,3 +13,5 @@ export function takeFirstOrThrow<T>(items: T[]) {
 
   return first;
 }
+
+export const databasePrefix = "versator";

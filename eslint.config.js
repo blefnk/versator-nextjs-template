@@ -59,6 +59,7 @@ export default tseslint.config(
       "@typescript-eslint/no-unsafe-call": "off",
       "@typescript-eslint/require-await": "off",
       "@typescript-eslint/no-deprecated": "off",
+      "no-constant-binary-expression": "off",
       "no-constant-condition": "off",
       "no-case-declarations": "off",
     },

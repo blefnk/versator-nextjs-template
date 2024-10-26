@@ -16,6 +16,7 @@ import { Shell } from "~/components/shell";
 
 import { Billing } from "./_components/billing";
 import { BillingSkeleton } from "./_components/billing-skeleton";
+import { AlertCard } from "~/components/alert-card";
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),

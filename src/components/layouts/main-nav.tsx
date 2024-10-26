@@ -39,14 +39,15 @@ export function MainNav({ items }: MainNavProps) {
                 {items[0].title}
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                  <li className="row-span-3">
+                <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-2 lg:grid-rows-1">
+                  {/* Left Column */}
+                  <li className="flex flex-col justify-between row-span-full">
                     <NavigationMenuLink asChild>
                       <Link
                         href="/"
-                        className="flex size-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                        className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                       >
-                        <Icons.logo className="size-6" aria-hidden="true" />
+                        <Icons.logo className="h-6 w-6" aria-hidden="true" />
                         <div className="mb-2 mt-4 text-lg font-medium">
                           {siteConfig.name}
                         </div>
@@ -57,15 +58,19 @@ export function MainNav({ items }: MainNavProps) {
                       </Link>
                     </NavigationMenuLink>
                   </li>
-                  {items[0].items.map((item) => (
-                    <ListItem
-                      key={item.title}
-                      title={item.title}
-                      href={item.href}
-                    >
-                      {item.description}
-                    </ListItem>
-                  ))}
+
+                  {/* Right Column */}
+                  <div className="flex flex-col space-y-3">
+                    {items[0].items.map((item) => (
+                      <ListItem
+                        key={item.title}
+                        title={item.title}
+                        href={item.href}
+                      >
+                        {item.description}
+                      </ListItem>
+                    ))}
+                  </div>
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>

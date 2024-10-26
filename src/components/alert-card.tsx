@@ -37,7 +37,7 @@ export function AlertCard({
       {children ?? (
         <div className="flex flex-col items-center space-y-2 text-center">
           <AlertTitle className="text-lg">
-            {title ?? "Rewriting with the latest Next.js 14 features!"}
+            {title ?? "Rewriting with the latest Next.js 15 features"}
           </AlertTitle>
           {description ? (
             <AlertDescription className="text-muted-foreground">
@@ -47,10 +47,10 @@ export function AlertCard({
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
               <AlertDescription>Follow along on</AlertDescription>
               <Link
-                href={siteConfig.links.x}
+                href={siteConfig.links.discord}
                 className="transition-colors hover:text-foreground"
               >
-                X
+                Discord
               </Link>
             </div>
           )}

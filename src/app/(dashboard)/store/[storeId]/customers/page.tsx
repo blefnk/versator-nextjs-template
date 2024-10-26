@@ -11,6 +11,7 @@ import { customersSearchParamsSchema } from "~/lib/validations/params";
 import { DataTableSkeleton } from "~/components/data-table/data-table-skeleton";
 import { DateRangePicker } from "~/components/date-range-picker";
 import { CustomersTable } from "~/components/tables/customers-table";
+import { AlertCard } from "~/components/alert-card";
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
@@ -153,6 +154,7 @@ export default async function CustomersPage({
       >
         <CustomersTable promise={ordersPromise} storeId={store.id} />
       </React.Suspense>
+      <AlertCard />
     </div>
   );
 }
