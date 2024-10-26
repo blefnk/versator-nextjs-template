@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils"
-import { Skeleton } from "@/components/ui/skeleton"
-import { DialogShell } from "@/components/dialog-shell"
-import { PlaceholderImage } from "@/components/placeholder-image"
+import { cn } from "~/lib/utils";
+import { Skeleton } from "~/components/ui/skeleton";
+import { DialogShell } from "~/components/dialog-shell";
+import { PlaceholderImage } from "~/components/placeholder-image";
 
 export default function ProductModalLoading() {
   return (
@@ -25,5 +25,5 @@ export default function ProductModalLoading() {
         </div>
       </div>
     </DialogShell>
-  )
+  );
 }

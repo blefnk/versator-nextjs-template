@@ -1,43 +1,43 @@
-import type { Metadata } from "next"
-import { redirect } from "next/navigation"
-import { env } from "@/env.js"
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { env } from "~/env.js";
 
-import { getCategories, getSubcategories } from "@/lib/queries/product"
-import { getCachedUser } from "@/lib/queries/user"
+import { getCategories, getSubcategories } from "~/lib/queries/product";
+import { getCachedUser } from "~/lib/queries/user";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "~/components/ui/card";
 
-import { CreateProductForm } from "./_components/create-product-form"
+import { CreateProductForm } from "./_components/create-product-form";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "New Product",
   description: "Add a new product",
-}
+};
 
 interface NewProductPageProps {
   params: {
-    storeId: string
-  }
+    storeId: string;
+  };
 }
 
 export default async function NewProductPage({ params }: NewProductPageProps) {
-  const storeId = decodeURIComponent(params.storeId)
+  const storeId = decodeURIComponent(params.storeId);
 
-  const user = await getCachedUser()
+  const user = await getCachedUser();
 
   if (!user) {
-    redirect("/sigin")
+    redirect("/sigin");
   }
 
   const promises = Promise.all([getCategories(), getSubcategories()]).then(
-    ([categories, subcategories]) => ({ categories, subcategories })
-  )
+    ([categories, subcategories]) => ({ categories, subcategories }),
+  );
 
   return (
     <Card>
@@ -49,5 +49,5 @@ export default async function NewProductPage({ params }: NewProductPageProps) {
         <CreateProductForm storeId={storeId} promises={promises} />
       </CardContent>
     </Card>
-  )
+  );
 }

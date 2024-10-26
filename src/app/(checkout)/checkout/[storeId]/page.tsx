@@ -1,38 +1,38 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { db } from "@/db"
-import { stores } from "@/db/schema"
-import { env } from "@/env.js"
-import { ArrowLeftIcon } from "@radix-ui/react-icons"
-import { eq } from "drizzle-orm"
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { db } from "~/db";
+import { stores } from "~/db/schema";
+import { env } from "~/env.js";
+import { ArrowLeftIcon } from "@radix-ui/react-icons";
+import { eq } from "drizzle-orm";
 
-import { getCart } from "@/lib/actions/cart"
-import { createPaymentIntent, getStripeAccount } from "@/lib/actions/stripe"
-import { cn, formatPrice } from "@/lib/utils"
-import { Button, buttonVariants } from "@/components/ui/button"
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
-import { CartLineItems } from "@/components/checkout/cart-line-items"
-import { CheckoutForm } from "@/components/checkout/checkout-form"
-import { CheckoutShell } from "@/components/checkout/checkout-shell"
-import { Shell } from "@/components/shell"
+import { getCart } from "~/lib/actions/cart";
+import { createPaymentIntent, getStripeAccount } from "~/lib/actions/stripe";
+import { cn, formatPrice } from "~/lib/utils";
+import { Button, buttonVariants } from "~/components/ui/button";
+import { Drawer, DrawerContent, DrawerTrigger } from "~/components/ui/drawer";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Separator } from "~/components/ui/separator";
+import { CartLineItems } from "~/components/checkout/cart-line-items";
+import { CheckoutForm } from "~/components/checkout/checkout-form";
+import { CheckoutShell } from "~/components/checkout/checkout-shell";
+import { Shell } from "~/components/shell";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "Checkout",
   description: "Checkout with store items",
-}
+};
 
 interface CheckoutPageProps {
   params: {
-    storeId: string
-  }
+    storeId: string;
+  };
 }
 
 export default async function CheckoutPage({ params }: CheckoutPageProps) {
-  const storeId = decodeURIComponent(params.storeId)
+  const storeId = decodeURIComponent(params.storeId);
 
   const store = await db
     .select({
@@ -43,27 +43,27 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
     .from(stores)
     .where(eq(stores.id, storeId))
     .execute()
-    .then((rows) => rows[0])
+    .then((rows) => rows[0]);
 
   if (!store) {
-    notFound()
+    notFound();
   }
 
   const { isConnected } = await getStripeAccount({
     storeId,
-  })
+  });
 
-  const cartLineItems = await getCart({ storeId })
+  const cartLineItems = await getCart({ storeId });
 
   const paymentIntentPromise = createPaymentIntent({
     storeId: store.id,
     items: cartLineItems,
-  })
+  });
 
   const total = cartLineItems.reduce(
     (total, item) => total + Number(item.quantity) * Number(item.price),
-    0
-  )
+    0,
+  );
 
   if (!(isConnected && store.stripeAccountId)) {
     return (
@@ -82,14 +82,14 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
             className={cn(
               buttonVariants({
                 size: "sm",
-              })
+              }),
             )}
           >
             Back to cart
           </Link>
         </div>
       </Shell>
-    )
+    );
   }
 
   return (
@@ -107,7 +107,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                 aria-hidden="true"
               />
               <div className="block font-medium transition group-hover:hidden">
-                Skateshop
+                Versator
               </div>
               <div className="hidden font-medium transition group-hover:block">
                 Back
@@ -133,7 +133,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                       Total (
                       {cartLineItems.reduce(
                         (acc, item) => acc + Number(item.quantity),
-                        0
+                        0,
                       )}
                       )
                     </div>
@@ -169,5 +169,5 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
         </ScrollArea>
       </CheckoutShell>
     </section>
-  )
+  );
 }

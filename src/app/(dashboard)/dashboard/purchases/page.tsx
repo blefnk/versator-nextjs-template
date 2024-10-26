@@ -1,61 +1,61 @@
-import * as React from "react"
-import type { Metadata } from "next"
-import { redirect } from "next/navigation"
-import { db } from "@/db"
-import { orders, stores, type Order } from "@/db/schema"
-import { env } from "@/env.js"
-import type { SearchParams } from "@/types"
-import { and, asc, desc, eq, inArray, like, sql } from "drizzle-orm"
+import * as React from "react";
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { db } from "~/db";
+import { orders, stores, type Order } from "~/db/schema";
+import { env } from "~/env.js";
+import type { SearchParams } from "~/types";
+import { and, asc, desc, eq, inArray, like, sql } from "drizzle-orm";
 
-import { getCachedUser } from "@/lib/queries/user"
-import { getUserEmail } from "@/lib/utils"
-import { purchasesSearchParamsSchema } from "@/lib/validations/params"
-import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton"
+import { getCachedUser } from "~/lib/queries/user";
+import { getUserEmail } from "~/lib/utils";
+import { purchasesSearchParamsSchema } from "~/lib/validations/params";
+import { DataTableSkeleton } from "~/components/data-table/data-table-skeleton";
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/page-header"
-import { Shell } from "@/components/shell"
-import { PurchasesTable } from "@/components/tables/purchases-table"
+} from "~/components/page-header";
+import { Shell } from "~/components/shell";
+import { PurchasesTable } from "~/components/tables/purchases-table";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "Purchases",
   description: "Manage your purchases",
-}
+};
 interface PurchasesPageProps {
-  searchParams: SearchParams
+  searchParams: SearchParams;
 }
 
 export default async function PurchasesPage({
   searchParams,
 }: PurchasesPageProps) {
   const { page, per_page, sort, store, status } =
-    purchasesSearchParamsSchema.parse(searchParams)
+    purchasesSearchParamsSchema.parse(searchParams);
 
-  const user = await getCachedUser()
+  const user = await getCachedUser();
 
   if (!user) {
-    redirect("/signin")
+    redirect("/signin");
   }
 
-  const email = getUserEmail(user)
+  const email = getUserEmail(user);
 
   // Fallback page for invalid page numbers
-  const fallbackPage = isNaN(page) || page < 1 ? 1 : page
+  const fallbackPage = isNaN(page) || page < 1 ? 1 : page;
   // Number of items per page
-  const limit = isNaN(per_page) ? 10 : per_page
+  const limit = isNaN(per_page) ? 10 : per_page;
   // Number of items to skip
-  const offset = fallbackPage > 0 ? (fallbackPage - 1) * limit : 0
+  const offset = fallbackPage > 0 ? (fallbackPage - 1) * limit : 0;
 
   // Column and order to sort by
-  const [column, order] = (sort?.split(".") as [
+  const [column, order] = (sort.split(".") as [
     keyof Order | undefined,
     "asc" | "desc" | undefined,
-  ]) ?? ["createdAt", "desc"]
+  ]) ?? ["createdAt", "desc"];
 
-  const statuses = status ? status.split(".") : []
+  const statuses = status ? status.split(".") : [];
 
   // Transaction is used to ensure both queries are executed in a single transaction
   const ordersPromise = db.transaction(async (tx) => {
@@ -85,16 +85,16 @@ export default async function PurchasesPage({
             // Filter by status
             statuses.length > 0
               ? inArray(orders.stripePaymentIntentStatus, statuses)
-              : undefined
-          )
+              : undefined,
+          ),
         )
         .orderBy(
           column && column in orders
             ? order === "asc"
               ? asc(orders[column])
               : desc(orders[column])
-            : desc(orders.createdAt)
-        )
+            : desc(orders.createdAt),
+        );
 
       const count = await tx
         .select({
@@ -112,23 +112,23 @@ export default async function PurchasesPage({
             // Filter by status
             statuses.length > 0
               ? inArray(orders.stripePaymentIntentStatus, statuses)
-              : undefined
-          )
+              : undefined,
+          ),
         )
-        .then((res) => res[0]?.count ?? 0)
+        .then((res) => res[0]?.count ?? 0);
 
       return {
         data,
         pageCount: Math.ceil(count / limit),
-      }
+      };
     } catch (err) {
-      console.error(err)
+      console.error(err);
       return {
         data: [],
         pageCount: 0,
-      }
+      };
     }
-  })
+  });
 
   return (
     <Shell variant="sidebar">
@@ -142,5 +142,5 @@ export default async function PurchasesPage({
         <PurchasesTable promise={ordersPromise} />
       </React.Suspense>
     </Shell>
-  )
+  );
 }

@@ -1,31 +1,31 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import { siteConfig } from "@/config/site"
-import { type getGithubStars } from "@/lib/queries/github"
-import type { getCategories, getFeaturedProducts } from "@/lib/queries/product"
-import { type getFeaturedStores } from "@/lib/queries/store"
-import { cn } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { buttonVariants } from "@/components/ui/button"
-import { ContentSection } from "@/components/content-section"
-import { Icons } from "@/components/icons"
+import { siteConfig } from "~/config/site";
+import { type getGithubStars } from "~/lib/queries/github";
+import type { getCategories, getFeaturedProducts } from "~/lib/queries/product";
+import { type getFeaturedStores } from "~/lib/queries/store";
+import { cn } from "~/lib/utils";
+import { Badge } from "~/components/ui/badge";
+import { buttonVariants } from "~/components/ui/button";
+import { ContentSection } from "~/components/content-section";
+import { Icons } from "~/components/icons";
 import {
   PageActions,
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/page-header"
-import { ProductCard } from "@/components/product-card"
-import { Shell } from "@/components/shell"
-import { StoreCard } from "@/components/store-card"
+} from "~/components/page-header";
+import { ProductCard } from "~/components/product-card";
+import { Shell } from "~/components/shell";
+import { StoreCard } from "~/components/store-card";
 
-import { CategoryCard } from "./category-card"
+import { CategoryCard } from "./category-card";
 
 interface LobbyProps {
-  githubStarsPromise: ReturnType<typeof getGithubStars>
-  productsPromise: ReturnType<typeof getFeaturedProducts>
-  categoriesPromise: ReturnType<typeof getCategories>
-  storesPromise: ReturnType<typeof getFeaturedStores>
+  githubStarsPromise: ReturnType<typeof getGithubStars>;
+  productsPromise: ReturnType<typeof getFeaturedProducts>;
+  categoriesPromise: ReturnType<typeof getCategories>;
+  storesPromise: ReturnType<typeof getFeaturedStores>;
 }
 
 export async function Lobby({
@@ -40,7 +40,7 @@ export async function Lobby({
     productsPromise,
     categoriesPromise,
     storesPromise,
-  ])
+  ]);
 
   return (
     <Shell className="max-w-6xl gap-0">
@@ -75,7 +75,7 @@ export async function Lobby({
           className="max-w-[46.875rem] animate-fade-up"
           style={{ animationDelay: "0.30s", animationFillMode: "both" }}
         >
-          Skateshop is an open-source platform for building and customizing your
+          Versator is an open-source platform for building and customizing your
           own commerce platform with ease.
         </PageHeaderDescription>
         <PageActions
@@ -128,5 +128,5 @@ export async function Lobby({
         ))}
       </ContentSection>
     </Shell>
-  )
+  );
 }

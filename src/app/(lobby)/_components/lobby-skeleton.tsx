@@ -1,20 +1,20 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
-import { ContentSection } from "@/components/content-section"
+import { cn } from "~/lib/utils";
+import { buttonVariants } from "~/components/ui/button";
+import { Skeleton } from "~/components/ui/skeleton";
+import { ContentSection } from "~/components/content-section";
 import {
   PageActions,
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/page-header"
-import { ProductCardSkeleton } from "@/components/product-card-skeleton"
-import { Shell } from "@/components/shell"
-import { StoreCardSkeleton } from "@/components/store-card-skeleton"
+} from "~/components/page-header";
+import { ProductCardSkeleton } from "~/components/product-card-skeleton";
+import { Shell } from "~/components/shell";
+import { StoreCardSkeleton } from "~/components/store-card-skeleton";
 
-import { CategoryCardSkeleton } from "./category-card-skeleton"
+import { CategoryCardSkeleton } from "./category-card-skeleton";
 
 export function LobbySkeleton() {
   return (
@@ -35,7 +35,7 @@ export function LobbySkeleton() {
           className="max-w-[46.875rem] animate-fade-up"
           style={{ animationDelay: "0.30s", animationFillMode: "both" }}
         >
-          Skateshop is an open-source platform for building and customizing your
+          Versator is an open-source platform for building and customizing your
           own commerce platform with ease.
         </PageHeaderDescription>
         <PageActions
@@ -81,5 +81,5 @@ export function LobbySkeleton() {
         ))}
       </ContentSection>
     </Shell>
-  )
+  );
 }

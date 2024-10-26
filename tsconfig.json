@@ -1,44 +1,51 @@
 {
   "compilerOptions": {
-    /* Base Options: */
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "target": "es2022",
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "moduleDetection": "force",
-    "isolatedModules": true,
-
-    /* Strictness */
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "checkJs": true,
-
-    /* Bundled projects */
-    "lib": ["dom", "dom.iterable", "ES2022"],
-    "noEmit": true,
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "jsx": "preserve",
-    "plugins": [{ "name": "next" }],
     "incremental": true,
-
-    /* Path Aliases */
-    "baseUrl": ".",
+    "target": "es2022",
+    "jsx": "preserve",
+    "lib": ["dom", "dom.iterable", "es2022"],
+    "moduleDetection": "force",
+    "module": "preserve",
     "paths": {
-      "@/*": ["./src/*"],
-      "contentlayer/generated": ["./.contentlayer/generated"]
-    }
+      "@/*": ["./cluster/*"],
+      "$/*": ["./addons/*"],
+      "#/*": ["./public/*"],
+      "~/*": ["./src/*"]
+    },
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "strict": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": false,
+    "skipLibCheck": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
-    ".eslintrc.cjs",
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.cjs",
-    "**/*.js",
     ".next/types/**/*.ts",
-    ".contentlayer/generated"
+    "cluster/**/*.ts",
+    "cluster/**/*.tsx",
+    "drizzle.config.ts",
+    "eslint.config.js",
+    "next.config.js",
+    "next-env.d.ts",
+    "reset.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/env.js",
+    "postcss.config.js",
+    "tailwind.config.ts",
+    "unlighthouse.config.ts"
   ],
   "exclude": ["node_modules"]
 }

@@ -1,25 +1,25 @@
-import { redirect } from "next/navigation"
+import { redirect } from "next/navigation";
 
-import { getStoresByUserId } from "@/lib/queries/store"
-import { getCachedUser, getUserPlanMetrics } from "@/lib/queries/user"
+import { getStoresByUserId } from "~/lib/queries/store";
+import { getCachedUser, getUserPlanMetrics } from "~/lib/queries/user";
 
-import { SidebarProvider } from "../../../components/layouts/sidebar-provider"
-import { DashboardHeader } from "../store/[storeId]/_components/dashboard-header"
-import { DashboardSidebar } from "../store/[storeId]/_components/dashboard-sidebar"
-import { DashboardSidebarSheet } from "../store/[storeId]/_components/dashboard-sidebar-sheet"
-import { StoreSwitcher } from "../store/[storeId]/_components/store-switcher"
+import { SidebarProvider } from "../../../components/layouts/sidebar-provider";
+import { DashboardHeader } from "../store/[storeId]/_components/dashboard-header";
+import { DashboardSidebar } from "../store/[storeId]/_components/dashboard-sidebar";
+import { DashboardSidebarSheet } from "../store/[storeId]/_components/dashboard-sidebar-sheet";
+import { StoreSwitcher } from "../store/[storeId]/_components/store-switcher";
 
 export default async function DashboardLayout({
   children,
 }: React.PropsWithChildren) {
-  const user = await getCachedUser()
+  const user = await getCachedUser();
 
   if (!user) {
-    redirect("/signin")
+    redirect("/signin");
   }
 
-  const storesPromise = getStoresByUserId({ userId: user.id })
-  const planMetricsPromise = getUserPlanMetrics({ userId: user.id })
+  const storesPromise = getStoresByUserId({ userId: user.id });
+  const planMetricsPromise = getUserPlanMetrics({ userId: user.id });
 
   return (
     <SidebarProvider>
@@ -50,5 +50,5 @@ export default async function DashboardLayout({
         </div>
       </div>
     </SidebarProvider>
-  )
+  );
 }

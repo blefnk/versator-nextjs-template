@@ -1,27 +1,27 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { env } from "@/env.js"
+import type { Metadata } from "next";
+import Link from "next/link";
+import { env } from "~/env.js";
 
-import { getUniqueStoreIds } from "@/lib/actions/cart"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import { CheckoutCard } from "@/components/checkout/checkout-card"
-import { Icons } from "@/components/icons"
+import { getUniqueStoreIds } from "~/lib/actions/cart";
+import { cn } from "~/lib/utils";
+import { buttonVariants } from "~/components/ui/button";
+import { CheckoutCard } from "~/components/checkout/checkout-card";
+import { Icons } from "~/components/icons";
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/page-header"
-import { Shell } from "@/components/shell"
+} from "~/components/page-header";
+import { Shell } from "~/components/shell";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "Cart",
   description: "Checkout with your cart items",
-}
+};
 
 export default async function CartPage() {
-  const uniqueStoreIds = await getUniqueStoreIds()
+  const uniqueStoreIds = await getUniqueStoreIds();
 
   return (
     <Shell>
@@ -37,7 +37,7 @@ export default async function CartPage() {
       {uniqueStoreIds.length > 0 ? (
         uniqueStoreIds.map(
           (storeId) =>
-            storeId && <CheckoutCard key={storeId} storeId={storeId} />
+            storeId && <CheckoutCard key={storeId} storeId={storeId} />,
         )
       ) : (
         <section
@@ -60,7 +60,7 @@ export default async function CartPage() {
                 variant: "link",
                 size: "sm",
                 className: "text-sm text-muted-foreground",
-              })
+              }),
             )}
           >
             Add items to your cart to checkout
@@ -68,5 +68,5 @@ export default async function CartPage() {
         </section>
       )}
     </Shell>
-  )
+  );
 }

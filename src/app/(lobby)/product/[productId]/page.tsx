@@ -1,38 +1,38 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { db } from "@/db"
-import { categories, products, stores } from "@/db/schema"
-import { env } from "@/env.js"
-import { and, desc, eq, not } from "drizzle-orm"
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { db } from "~/db";
+import { categories, products, stores } from "~/db/schema";
+import { env } from "~/env.js";
+import { and, desc, eq, not } from "drizzle-orm";
 
-import { formatPrice, toTitleCase } from "@/lib/utils"
+import { formatPrice, toTitleCase } from "~/lib/utils";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
-import { ProductCard } from "@/components/product-card"
-import { ProductImageCarousel } from "@/components/product-image-carousel"
-import { Rating } from "@/components/rating"
-import { Shell } from "@/components/shell"
+} from "~/components/ui/accordion";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Separator } from "~/components/ui/separator";
+import { ProductCard } from "~/components/product-card";
+import { ProductImageCarousel } from "~/components/product-image-carousel";
+import { Rating } from "~/components/rating";
+import { Shell } from "~/components/shell";
 
-import { AddToCartForm } from "./_components/add-to-cart-form"
-import { UpdateProductRatingButton } from "./_components/update-product-rating-button"
+import { AddToCartForm } from "./_components/add-to-cart-form";
+import { UpdateProductRatingButton } from "./_components/update-product-rating-button";
 
 interface ProductPageProps {
   params: {
-    productId: string
-  }
+    productId: string;
+  };
 }
 
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
-  const productId = decodeURIComponent(params.productId)
+  const productId = decodeURIComponent(params.productId);
 
   const product = await db.query.products.findFirst({
     columns: {
@@ -40,21 +40,21 @@ export async function generateMetadata({
       description: true,
     },
     where: eq(products.id, productId),
-  })
+  });
 
   if (!product) {
-    return {}
+    return {};
   }
 
   return {
-    metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+    metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
     title: toTitleCase(product.name),
     description: product.description,
-  }
+  };
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const productId = decodeURIComponent(params.productId)
+  const productId = decodeURIComponent(params.productId);
 
   const product = await db.query.products.findFirst({
     columns: {
@@ -71,10 +71,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
       category: true,
     },
     where: eq(products.id, productId),
-  })
+  });
 
   if (!product) {
-    notFound()
+    notFound();
   }
 
   const store = await db.query.stores.findFirst({
@@ -83,7 +83,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       name: true,
     },
     where: eq(stores.id, product.storeId),
-  })
+  });
 
   const otherProducts = store
     ? await db
@@ -102,11 +102,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
         .where(
           and(
             eq(products.storeId, product.storeId),
-            not(eq(products.id, productId))
-          )
+            not(eq(products.id, productId)),
+          ),
         )
         .orderBy(desc(products.inventory))
-    : []
+    : [];
 
   return (
     <Shell className="pb-12 md:pb-14">
@@ -183,5 +183,5 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
       ) : null}
     </Shell>
-  )
+  );
 }

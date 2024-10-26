@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { LineChart, type LineChartProps } from "@tremor/react"
+import { LineChart, type LineChartProps } from "@tremor/react";
 
-import { cn, formatPrice } from "@/lib/utils"
+import { cn, formatPrice } from "~/lib/utils";
 
 interface SalesChartProps
   extends Omit<LineChartProps, "data" | "index" | "categories"> {
   data: {
-    name: string
-    Total: number
-  }[]
+    name: string;
+    Total: number;
+  }[];
 }
 
 export function SalesChart({ data, className, ...props }: SalesChartProps) {
@@ -24,5 +24,5 @@ export function SalesChart({ data, className, ...props }: SalesChartProps) {
       yAxisWidth={48}
       {...props}
     />
-  )
+  );
 }

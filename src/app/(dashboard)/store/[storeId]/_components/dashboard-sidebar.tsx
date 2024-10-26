@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { useSelectedLayoutSegments } from "next/navigation"
-import { type SidebarNavItem } from "@/types"
+import * as React from "react";
+import Link from "next/link";
+import { useSelectedLayoutSegments } from "next/navigation";
+import { type SidebarNavItem } from "~/types";
 
-import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Icons } from "@/components/icons"
-import { SidebarNav } from "@/components/layouts/sidebar-nav"
+import { siteConfig } from "~/config/site";
+import { cn } from "~/lib/utils";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Icons } from "~/components/icons";
+import { SidebarNav } from "~/components/layouts/sidebar-nav";
 
 interface DashboardSidebarProps extends React.HTMLAttributes<HTMLElement> {
-  storeId: string
-  children: React.ReactNode
+  storeId: string;
+  children: React.ReactNode;
 }
 
 export function DashboardSidebar({
@@ -22,7 +22,7 @@ export function DashboardSidebar({
   className,
   ...props
 }: DashboardSidebarProps) {
-  const segments = useSelectedLayoutSegments()
+  const segments = useSelectedLayoutSegments();
 
   const sidebarNav: SidebarNavItem[] = [
     {
@@ -61,7 +61,7 @@ export function DashboardSidebar({
       icon: "settings",
       active: segments.includes("settings"),
     },
-  ]
+  ];
 
   return (
     <aside className={cn("h-screen w-full", className)} {...props}>
@@ -81,5 +81,5 @@ export function DashboardSidebar({
         <SidebarNav items={sidebarNav} className="p-1 pt-4" />
       </ScrollArea>
     </aside>
-  )
+  );
 }

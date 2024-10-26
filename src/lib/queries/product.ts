@@ -1,21 +1,21 @@
-import "server-only"
+import "server-only";
 
 import {
   unstable_cache as cache,
   unstable_noStore as noStore,
-} from "next/cache"
-import { db } from "@/db"
+} from "next/cache";
+import { db } from "~/db";
 import {
   categories,
   products,
   stores,
   subcategories,
   type Product,
-} from "@/db/schema"
-import type { SearchParams } from "@/types"
-import { and, asc, count, desc, eq, gte, inArray, lte, sql } from "drizzle-orm"
+} from "~/db/schema";
+import type { SearchParams } from "~/types";
+import { and, asc, count, desc, eq, gte, inArray, lte, sql } from "drizzle-orm";
 
-import { getProductsSchema } from "@/lib/validations/product"
+import { getProductsSchema } from "~/lib/validations/product";
 
 // See the unstable_cache API docs: https://nextjs.org/docs/app/api-reference/functions/unstable_cache
 export async function getFeaturedProducts() {
@@ -39,35 +39,35 @@ export async function getFeaturedProducts() {
         .orderBy(
           desc(count(stores.stripeAccountId)),
           desc(count(products.images)),
-          desc(products.createdAt)
-        )
+          desc(products.createdAt),
+        );
     },
     ["featured-products"],
     {
       revalidate: 3600, // every hour
       tags: ["featured-products"],
-    }
-  )()
+    },
+  )();
 }
 
 // See the unstable_noStore API docs: https://nextjs.org/docs/app/api-reference/functions/unstable_noStore
 export async function getProducts(input: SearchParams) {
-  noStore()
+  noStore();
 
   try {
-    const search = getProductsSchema.parse(input)
+    const search = getProductsSchema.parse(input);
 
-    const limit = search.per_page
-    const offset = (search.page - 1) * limit
+    const limit = search.per_page;
+    const offset = (search.page - 1) * limit;
 
-    const [column, order] = (search.sort?.split(".") as [
+    const [column, order] = (search.sort.split(".") as [
       keyof Product | undefined,
       "asc" | "desc" | undefined,
-    ]) ?? ["createdAt", "desc"]
-    const [minPrice, maxPrice] = search.price_range?.split("-") ?? []
-    const categoryIds = search.categories?.split(".") ?? []
-    const subcategoryIds = search.subcategories?.split(".") ?? []
-    const storeIds = search.store_ids?.split(".") ?? []
+    ]) ?? ["createdAt", "desc"];
+    const [minPrice, maxPrice] = search.price_range?.split("-") ?? [];
+    const categoryIds = search.categories?.split(".") ?? [];
+    const subcategoryIds = search.subcategories?.split(".") ?? [];
+    const storeIds = search.store_ids?.split(".") ?? [];
 
     const transaction = await db.transaction(async (tx) => {
       const data = await tx
@@ -105,8 +105,8 @@ export async function getProducts(input: SearchParams) {
             storeIds.length ? inArray(products.storeId, storeIds) : undefined,
             input.active === "true"
               ? sql`(${stores.stripeAccountId}) is not null`
-              : undefined
-          )
+              : undefined,
+          ),
         )
         .groupBy(products.id)
         .orderBy(
@@ -114,8 +114,8 @@ export async function getProducts(input: SearchParams) {
             ? order === "asc"
               ? asc(products[column])
               : desc(products[column])
-            : desc(products.createdAt)
-        )
+            : desc(products.createdAt),
+        );
 
       const total = await tx
         .select({
@@ -132,33 +132,33 @@ export async function getProducts(input: SearchParams) {
               : undefined,
             minPrice ? gte(products.price, minPrice) : undefined,
             maxPrice ? lte(products.price, maxPrice) : undefined,
-            storeIds.length ? inArray(products.storeId, storeIds) : undefined
-          )
+            storeIds.length ? inArray(products.storeId, storeIds) : undefined,
+          ),
         )
         .execute()
-        .then((res) => res[0]?.count ?? 0)
+        .then((res) => res[0]?.count ?? 0);
 
-      const pageCount = Math.ceil(total / limit)
+      const pageCount = Math.ceil(total / limit);
 
       return {
         data,
         pageCount,
-      }
-    })
+      };
+    });
 
-    return transaction
+    return transaction;
   } catch (err) {
     return {
       data: [],
       pageCount: 0,
-    }
+    };
   }
 }
 
 export async function getProductCountByCategory({
   categoryId,
 }: {
-  categoryId: string
+  categoryId: string;
 }) {
   return await cache(
     async () => {
@@ -169,14 +169,14 @@ export async function getProductCountByCategory({
         .from(products)
         .where(eq(products.categoryId, categoryId))
         .execute()
-        .then((res) => res[0]?.count ?? 0)
+        .then((res) => res[0]?.count ?? 0);
     },
     [`product-count-${categoryId}`],
     {
       revalidate: 3600, // every hour
       tags: [`product-count-${categoryId}`],
-    }
-  )()
+    },
+  )();
 }
 
 export async function getCategories() {
@@ -191,14 +191,14 @@ export async function getCategories() {
           image: categories.image,
         })
         .from(categories)
-        .orderBy(desc(categories.name))
+        .orderBy(desc(categories.name));
     },
     ["categories"],
     {
       revalidate: 3600, // every hour
       tags: ["categories"],
-    }
-  )()
+    },
+  )();
 }
 
 export async function getCategorySlugFromId({ id }: { id: string }) {
@@ -211,14 +211,14 @@ export async function getCategorySlugFromId({ id }: { id: string }) {
         .from(categories)
         .where(eq(categories.id, id))
         .execute()
-        .then((res) => res[0]?.slug)
+        .then((res) => res[0]?.slug);
     },
     [`category-slug-${id}`],
     {
       revalidate: 3600, // every hour
       tags: [`category-slug-${id}`],
-    }
-  )()
+    },
+  )();
 }
 
 export async function getSubcategories() {
@@ -231,14 +231,14 @@ export async function getSubcategories() {
           slug: subcategories.slug,
           description: subcategories.description,
         })
-        .from(subcategories)
+        .from(subcategories);
     },
     ["subcategories"],
     {
       revalidate: 3600, // every hour
       tags: ["subcategories"],
-    }
-  )()
+    },
+  )();
 }
 
 export async function getSubcategorySlugFromId({ id }: { id: string }) {
@@ -251,20 +251,20 @@ export async function getSubcategorySlugFromId({ id }: { id: string }) {
         .from(subcategories)
         .where(eq(subcategories.id, id))
         .execute()
-        .then((res) => res[0]?.slug)
+        .then((res) => res[0]?.slug);
     },
     [`subcategory-slug-${id}`],
     {
       revalidate: 3600, // every hour
       tags: [`subcategory-slug-${id}`],
-    }
-  )()
+    },
+  )();
 }
 
 export async function getSubcategoriesByCategory({
   categoryId,
 }: {
-  categoryId: string
+  categoryId: string;
 }) {
   return await cache(
     async () => {
@@ -276,12 +276,12 @@ export async function getSubcategoriesByCategory({
           description: subcategories.description,
         })
         .from(subcategories)
-        .where(eq(subcategories.id, categoryId))
+        .where(eq(subcategories.id, categoryId));
     },
     [`subcategories-${categoryId}`],
     {
       revalidate: 3600, // every hour
       tags: [`subcategories-${categoryId}`],
-    }
-  )()
+    },
+  )();
 }

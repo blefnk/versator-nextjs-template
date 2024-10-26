@@ -1,12 +1,12 @@
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Icons } from "@/components/icons"
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Icons } from "~/components/icons";
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/page-header"
+} from "~/components/page-header";
 
 export default function OrderSuccessLoading() {
   return (
@@ -61,5 +61,5 @@ export default function OrderSuccessLoading() {
         </section>
       </div>
     </div>
-  )
+  );
 }

@@ -1,5 +1,10 @@
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "~/components/ui/card";
+import { Skeleton } from "~/components/ui/skeleton";
 
 export default function UpdateProductLoading() {
   return (
@@ -25,5 +30,5 @@ export default function UpdateProductLoading() {
         <Skeleton className="h-10 w-32" />
       </CardFooter>
     </Card>
-  )
+  );
 }

@@ -1,28 +1,28 @@
-import * as React from "react"
-import Link from "next/link"
+import * as React from "react";
+import Link from "next/link";
 
 import {
   getProductCountByCategory,
   type getCategories,
-} from "@/lib/queries/product"
+} from "~/lib/queries/product";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Icons } from "@/components/icons"
+} from "~/components/ui/card";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Icons } from "~/components/icons";
 
 interface CategoryCardProps {
-  category: Awaited<ReturnType<typeof getCategories>>[number]
+  category: Awaited<ReturnType<typeof getCategories>>[number];
 }
 
 export function CategoryCard({ category }: CategoryCardProps) {
   const productCountPromise = getProductCountByCategory({
     categoryId: category.id,
-  })
+  });
 
   return (
     <Link href={`/collections/${category.slug}`}>
@@ -40,20 +40,20 @@ export function CategoryCard({ category }: CategoryCardProps) {
         </CardContent>
       </Card>
     </Link>
-  )
+  );
 }
 
 interface ProductCountProps {
-  productCountPromise: ReturnType<typeof getProductCountByCategory>
+  productCountPromise: ReturnType<typeof getProductCountByCategory>;
 }
 
 async function ProductCount({ productCountPromise }: ProductCountProps) {
-  const count = await productCountPromise
+  const count = await productCountPromise;
 
   return (
     <div className="flex w-fit items-center text-[0.8rem] text-muted-foreground">
       <Icons.product className="mr-1.5 size-3.5" aria-hidden="true" />
       {count} products
     </div>
-  )
+  );
 }

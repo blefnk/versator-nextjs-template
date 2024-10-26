@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import { UserProfile as ClerkUserProfile } from "@clerk/nextjs"
-import { dark } from "@clerk/themes"
-import type { Theme, UserProfileProps } from "@clerk/types"
-import { useTheme } from "next-themes"
+import { UserProfile as ClerkUserProfile } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
+import type { Theme, UserProfileProps } from "@clerk/types";
+import { useTheme } from "next-themes";
 
 const appearance: Theme = {
   variables: {
     borderRadius: "0.25rem",
   },
-}
+};
 
 export function UserProfile({ ...props }: UserProfileProps) {
-  const { theme } = useTheme()
+  const { theme } = useTheme();
 
   return (
     <ClerkUserProfile
@@ -25,5 +25,5 @@ export function UserProfile({ ...props }: UserProfileProps) {
       }}
       {...props}
     />
-  )
+  );
 }

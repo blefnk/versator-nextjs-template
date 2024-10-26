@@ -1,6 +1,6 @@
-import { CardHeader } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import { PlaceholderImage } from "@/components/placeholder-image"
+import { CardHeader } from "~/components/ui/card";
+import { Skeleton } from "~/components/ui/skeleton";
+import { PlaceholderImage } from "~/components/placeholder-image";
 
 export function PostCardSkeleton() {
   return (
@@ -14,5 +14,5 @@ export function PostCardSkeleton() {
         <Skeleton className="h-3 w-1/4" />
       </div>
     </article>
-  )
+  );
 }

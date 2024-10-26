@@ -1,21 +1,21 @@
-import type { Metadata } from "next"
-import { env } from "@/env.js"
+import type { Metadata } from "next";
+import { env } from "~/env.js";
 
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/page-header"
-import { Shell } from "@/components/shell"
+} from "~/components/page-header";
+import { Shell } from "~/components/shell";
 
-import { UserProfile } from "./_components/user-profile"
+import { UserProfile } from "./_components/user-profile";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "Account",
   description: "Manage your account settings",
-}
+};
 
 export default function AccountPage() {
   return (
@@ -31,5 +31,5 @@ export default function AccountPage() {
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
     </Shell>
-  )
+  );
 }

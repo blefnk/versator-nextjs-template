@@ -1,40 +1,40 @@
-import * as React from "react"
-import { type Metadata } from "next"
-import { unstable_noStore as noStore } from "next/cache"
-import { notFound } from "next/navigation"
-import { db } from "@/db"
-import { categories, products, stores, type Product } from "@/db/schema"
-import { env } from "@/env.js"
-import type { SearchParams } from "@/types"
-import { and, asc, desc, eq, gte, inArray, like, lte, sql } from "drizzle-orm"
+import * as React from "react";
+import { type Metadata } from "next";
+import { unstable_noStore as noStore } from "next/cache";
+import { notFound } from "next/navigation";
+import { db } from "~/db";
+import { categories, products, stores, type Product } from "~/db/schema";
+import { env } from "~/env.js";
+import type { SearchParams } from "~/types";
+import { and, asc, desc, eq, gte, inArray, like, lte, sql } from "drizzle-orm";
 
-import { storesProductsSearchParamsSchema } from "@/lib/validations/params"
-import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton"
-import { DateRangePicker } from "@/components/date-range-picker"
-import { ProductsTable } from "@/components/tables/products-table"
+import { storesProductsSearchParamsSchema } from "~/lib/validations/params";
+import { DataTableSkeleton } from "~/components/data-table/data-table-skeleton";
+import { DateRangePicker } from "~/components/date-range-picker";
+import { ProductsTable } from "~/components/tables/products-table";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "Products",
   description: "Manage your products",
-}
+};
 
 interface ProductsPageProps {
   params: {
-    storeId: string
-  }
-  searchParams: SearchParams
+    storeId: string;
+  };
+  searchParams: SearchParams;
 }
 
 export default async function ProductsPage({
   params,
   searchParams,
 }: ProductsPageProps) {
-  const storeId = decodeURIComponent(params.storeId)
+  const storeId = decodeURIComponent(params.storeId);
 
   // Parse search params using zod schema
   const { page, per_page, sort, name, category, from, to } =
-    storesProductsSearchParamsSchema.parse(searchParams)
+    storesProductsSearchParamsSchema.parse(searchParams);
 
   const store = await db.query.stores.findFirst({
     where: eq(stores.id, storeId),
@@ -42,32 +42,32 @@ export default async function ProductsPage({
       id: true,
       name: true,
     },
-  })
+  });
 
   if (!store) {
-    notFound()
+    notFound();
   }
 
   // Fallback page for invalid page numbers
-  const fallbackPage = isNaN(page) || page < 1 ? 1 : page
+  const fallbackPage = isNaN(page) || page < 1 ? 1 : page;
   // Number of items per page
-  const limit = isNaN(per_page) ? 10 : per_page
+  const limit = isNaN(per_page) ? 10 : per_page;
   // Number of items to skip
-  const offset = fallbackPage > 0 ? (fallbackPage - 1) * limit : 0
+  const offset = fallbackPage > 0 ? (fallbackPage - 1) * limit : 0;
   // Column and order to sort by
-  const [column, order] = (sort?.split(".") as [
+  const [column, order] = (sort.split(".") as [
     keyof Product | undefined,
     "asc" | "desc" | undefined,
-  ]) ?? ["createdAt", "desc"]
+  ]) ?? ["createdAt", "desc"];
 
-  const categoryIds = category?.split(".") ?? []
+  const categoryIds = category?.split(".") ?? [];
 
-  const fromDay = from ? new Date(from) : undefined
-  const toDay = to ? new Date(to) : undefined
+  const fromDay = from ? new Date(from) : undefined;
+  const toDay = to ? new Date(to) : undefined;
 
   // Transaction is used to ensure both queries are executed in a single transaction
   const productsPromise = db.transaction(async (tx) => {
-    noStore()
+    noStore();
     try {
       const data = await tx
         .select({
@@ -96,18 +96,18 @@ export default async function ProductsPage({
             fromDay && toDay
               ? and(
                   gte(products.createdAt, fromDay),
-                  lte(products.createdAt, toDay)
+                  lte(products.createdAt, toDay),
                 )
-              : undefined
-          )
+              : undefined,
+          ),
         )
         .orderBy(
           column && column in products
             ? order === "asc"
               ? asc(products[column])
               : desc(products[column])
-            : desc(products.createdAt)
-        )
+            : desc(products.createdAt),
+        );
 
       const count = await tx
         .select({
@@ -127,27 +127,27 @@ export default async function ProductsPage({
             fromDay && toDay
               ? and(
                   gte(products.createdAt, fromDay),
-                  lte(products.createdAt, toDay)
+                  lte(products.createdAt, toDay),
                 )
-              : undefined
-          )
+              : undefined,
+          ),
         )
-        .then((res) => res[0]?.count ?? 0)
+        .then((res) => res[0]?.count ?? 0);
 
-      const pageCount = Math.ceil(count / limit)
+      const pageCount = Math.ceil(count / limit);
 
       return {
         data,
         pageCount,
-      }
+      };
     } catch (err) {
-      console.error(err)
+      console.error(err);
       return {
         data: [],
         pageCount: 0,
-      }
+      };
     }
-  })
+  });
 
   return (
     <div className="space-y-6">
@@ -159,5 +159,5 @@ export default async function ProductsPage({
         <ProductsTable promise={productsPromise} storeId={storeId} />
       </React.Suspense> */}
     </div>
-  )
+  );
 }

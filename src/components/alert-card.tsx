@@ -1,16 +1,16 @@
-import React from "react"
-import Link from "next/link"
-import { RocketIcon } from "@radix-ui/react-icons"
+import React from "react";
+import Link from "next/link";
+import { RocketIcon } from "@radix-ui/react-icons";
 
-import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Icons } from "@/components/icons"
+import { siteConfig } from "~/config/site";
+import { cn } from "~/lib/utils";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
+import { Icons } from "~/components/icons";
 
 interface AlertCardProps extends React.ComponentPropsWithoutRef<typeof Alert> {
-  title?: string
-  description?: string
-  icon?: keyof typeof Icons
+  title?: string;
+  description?: string;
+  icon?: keyof typeof Icons;
 }
 
 export function AlertCard({
@@ -21,13 +21,13 @@ export function AlertCard({
   className,
   ...props
 }: AlertCardProps) {
-  const Icon = icon ? Icons[icon] : RocketIcon
+  const Icon = icon ? Icons[icon] : RocketIcon;
 
   return (
     <Alert
       className={cn(
         "flex flex-col items-center justify-center space-y-8 p-16",
-        className
+        className,
       )}
       {...props}
     >
@@ -57,5 +57,5 @@ export function AlertCard({
         </div>
       )}
     </Alert>
-  )
+  );
 }

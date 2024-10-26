@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useRouter } from "next/navigation"
-import { useSignUp } from "@clerk/nextjs"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
-import type { z } from "zod"
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { useSignUp } from "@clerk/nextjs";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import type { z } from "zod";
 
-import { showErrorToast } from "@/lib/handle-error"
-import { authSchema } from "@/lib/validations/auth"
-import { Button } from "@/components/ui/button"
+import { showErrorToast } from "~/lib/handle-error";
+import { authSchema } from "~/lib/validations/auth";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,17 +18,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Icons } from "@/components/icons"
-import { PasswordInput } from "@/components/password-input"
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { Icons } from "~/components/icons";
+import { PasswordInput } from "~/components/password-input";
 
-type Inputs = z.infer<typeof authSchema>
+type Inputs = z.infer<typeof authSchema>;
 
 export function SignUpForm() {
-  const router = useRouter()
-  const { isLoaded, signUp } = useSignUp()
-  const [loading, setLoading] = React.useState(false)
+  const router = useRouter();
+  const { isLoaded, signUp } = useSignUp();
+  const [loading, setLoading] = React.useState(false);
 
   // react-hook-form
   const form = useForm<Inputs>({
@@ -37,32 +37,32 @@ export function SignUpForm() {
       email: "",
       password: "",
     },
-  })
+  });
 
   async function onSubmit(data: Inputs) {
-    if (!isLoaded) return
+    if (!isLoaded) return;
 
-    setLoading(true)
+    setLoading(true);
 
     try {
       await signUp.create({
         emailAddress: data.email,
         password: data.password,
-      })
+      });
 
       // Send email verification code
       await signUp.prepareEmailAddressVerification({
         strategy: "email_code",
-      })
+      });
 
-      router.push("/signup/verify-email")
+      router.push("/signup/verify-email");
       toast.message("Check your email", {
         description: "We sent you a 6-digit verification code.",
-      })
+      });
     } catch (err) {
-      showErrorToast(err)
+      showErrorToast(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -107,5 +107,5 @@ export function SignUpForm() {
         </Button>
       </form>
     </Form>
-  )
+  );
 }

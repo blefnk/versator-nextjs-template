@@ -1,15 +1,15 @@
-import { type Metadata } from "next"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { db } from "@/db"
-import { stores } from "@/db/schema"
-import { env } from "@/env.js"
-import { eq } from "drizzle-orm"
+import { type Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { db } from "~/db";
+import { stores } from "~/db/schema";
+import { env } from "~/env.js";
+import { eq } from "drizzle-orm";
 
-import { updateStore } from "@/lib/actions/store"
-import { getStripeAccount } from "@/lib/actions/stripe"
-import { cn, formatDate } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
+import { updateStore } from "~/lib/actions/store";
+import { getStripeAccount } from "~/lib/actions/stripe";
+import { cn, formatDate } from "~/lib/utils";
+import { buttonVariants } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -17,21 +17,21 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { ConnectStoreToStripeButton } from "@/components/connect-store-to-stripe-button"
-import { LoadingButton } from "@/components/loading-button"
+} from "~/components/ui/card";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { Textarea } from "~/components/ui/textarea";
+import { ConnectStoreToStripeButton } from "~/components/connect-store-to-stripe-button";
+import { LoadingButton } from "~/components/loading-button";
 
 interface DashboardStorePageProps {
   params: {
-    storeId: string
-  }
+    storeId: string;
+  };
 }
 
 async function getStoreFromParams(params: DashboardStorePageProps["params"]) {
-  const { storeId } = params
+  const { storeId } = params;
 
   const store = await db.query.stores.findFirst({
     columns: {
@@ -40,42 +40,42 @@ async function getStoreFromParams(params: DashboardStorePageProps["params"]) {
       description: true,
     },
     where: eq(stores.id, storeId),
-  })
+  });
 
-  if (!store) return null
+  if (!store) return null;
 
-  return store
+  return store;
 }
 
 export async function generateMetadata({
   params,
 }: DashboardStorePageProps): Promise<Metadata> {
-  const store = await getStoreFromParams(params)
+  const store = await getStoreFromParams(params);
 
   if (!store) {
-    return {}
+    return {};
   }
 
   return {
-    metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+    metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
     title: `Manage ${store.name} store`,
     description:
       store.description ?? "Manage inventory, orders, and more in your store.",
-  }
+  };
 }
 
 export default async function DashboardStorePage({
   params,
 }: DashboardStorePageProps) {
-  const store = await getStoreFromParams(params)
+  const store = await getStoreFromParams(params);
 
   if (!store) {
-    notFound()
+    notFound();
   }
 
   const { account: stripeAccount } = await getStripeAccount({
     storeId: store.id,
-  })
+  });
 
   return (
     <div className="space-y-10">
@@ -141,7 +141,7 @@ export default async function DashboardStorePage({
               className={cn(
                 buttonVariants({
                   className: "text-center",
-                })
+                }),
               )}
             >
               Manage Stripe account
@@ -172,7 +172,11 @@ export default async function DashboardStorePage({
         </CardHeader>
         <CardContent>
           <form
-            action={updateStore.bind(null, store.id)}
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              await updateStore(store.id, formData);
+            }}
             className="grid w-full max-w-xl gap-5"
           >
             <div className="grid gap-2.5">
@@ -218,5 +222,5 @@ export default async function DashboardStorePage({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

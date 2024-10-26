@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useClerk } from "@clerk/nextjs"
-import { type HandleOAuthCallbackParams } from "@clerk/types"
+import * as React from "react";
+import { useClerk } from "@clerk/nextjs";
+import { type HandleOAuthCallbackParams } from "@clerk/types";
 
-import { Icons } from "@/components/icons"
+import { Icons } from "~/components/icons";
 
 interface SSOCallbackProps {
-  searchParams: HandleOAuthCallbackParams
+  searchParams: HandleOAuthCallbackParams;
 }
 
 export function SSOCallback({ searchParams }: SSOCallbackProps) {
-  const { handleRedirectCallback } = useClerk()
+  const { handleRedirectCallback } = useClerk();
 
   React.useEffect(() => {
-    void handleRedirectCallback(searchParams)
-  }, [searchParams, handleRedirectCallback])
+    void handleRedirectCallback(searchParams);
+  }, [searchParams, handleRedirectCallback]);
 
   return (
     <div
@@ -26,5 +26,5 @@ export function SSOCallback({ searchParams }: SSOCallbackProps) {
     >
       <Icons.spinner className="size-16 animate-spin" aria-hidden="true" />
     </div>
-  )
+  );
 }

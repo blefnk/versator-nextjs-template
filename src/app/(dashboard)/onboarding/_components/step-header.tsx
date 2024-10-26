@@ -1,8 +1,8 @@
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 
 interface StepHeaderProps {
-  title: string
-  description?: string
+  title: string;
+  description?: string;
 }
 
 export function StepHeader({ title, description }: StepHeaderProps) {
@@ -27,5 +27,5 @@ export function StepHeader({ title, description }: StepHeaderProps) {
         </p>
       ) : null}
     </motion.div>
-  )
+  );
 }

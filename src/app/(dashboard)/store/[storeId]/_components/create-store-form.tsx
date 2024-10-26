@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { type UseFormReturn } from "react-hook-form"
+import * as React from "react";
+import { type UseFormReturn } from "react-hook-form";
 
-import { cn } from "@/lib/utils"
-import { type CreateStoreSchema } from "@/lib/validations/store"
+import { cn } from "~/lib/utils";
+import { type CreateStoreSchema } from "~/lib/validations/store";
 import {
   Form,
   FormControl,
@@ -12,15 +12,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { Textarea } from "~/components/ui/textarea";
 
 interface CreateStoreFormProps
   extends Omit<React.ComponentPropsWithRef<"form">, "onSubmit"> {
-  children: React.ReactNode
-  form: UseFormReturn<CreateStoreSchema>
-  onSubmit: (data: CreateStoreSchema) => void
+  children: React.ReactNode;
+  form: UseFormReturn<CreateStoreSchema>;
+  onSubmit: (data: CreateStoreSchema) => void;
 }
 
 export function CreateStoreForm({
@@ -74,5 +74,5 @@ export function CreateStoreForm({
         {children}
       </form>
     </Form>
-  )
+  );
 }

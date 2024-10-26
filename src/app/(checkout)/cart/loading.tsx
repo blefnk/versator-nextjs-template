@@ -1,14 +1,19 @@
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Icons } from "@/components/icons"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "~/components/ui/card";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Icons } from "~/components/icons";
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/page-header"
-import { Shell } from "@/components/shell"
+} from "~/components/page-header";
+import { Shell } from "~/components/shell";
 
 export default function CartLoading() {
   return (
@@ -68,5 +73,5 @@ export default function CartLoading() {
         </CardFooter>
       </Card>
     </Shell>
-  )
+  );
 }

@@ -1,44 +1,42 @@
-import { type Metadata } from "next"
-import { cookies } from "next/headers"
-import Link from "next/link"
-import { env } from "@/env.js"
-import { CheckIcon, CircleIcon } from "@radix-ui/react-icons"
+import { type Metadata } from "next";
+import { cookies } from "next/headers";
+import Link from "next/link";
+import { env } from "~/env.js";
+import { CheckIcon, CircleIcon } from "@radix-ui/react-icons";
 
-import { getCartItems } from "@/lib/actions/cart"
-import { getProducts } from "@/lib/queries/product"
-import { cn } from "@/lib/utils"
-import { productsSearchParamsSchema } from "@/lib/validations/params"
-import { BoardBuilder } from "@/components/board-builder"
+import { getCartItems } from "~/lib/actions/cart";
+import { getProducts } from "~/lib/queries/product";
+import { cn } from "~/lib/utils";
+import { productsSearchParamsSchema } from "~/lib/validations/params";
+import { BoardBuilder } from "~/components/board-builder";
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/page-header"
-import { Shell } from "@/components/shell"
+} from "~/components/page-header";
+import { Shell } from "~/components/shell";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "Build a Board",
   description: "Select the components for your board",
-}
+};
 
 interface BuildABoadPageProps {
-  searchParams: {
-    [key: string]: string | string[] | undefined
-  }
+  searchParams: Record<string, string | string[] | undefined>;
 }
 
 export default async function BuildABoardPage({
   searchParams,
 }: BuildABoadPageProps) {
   const { page, per_page, sort, subcategory, price_range, active } =
-    productsSearchParamsSchema.parse(searchParams)
+    productsSearchParamsSchema.parse(searchParams);
 
   // Products transaction
-  const limit = typeof per_page === "string" ? parseInt(per_page) : 8
-  const offset = typeof page === "string" ? (parseInt(page) - 1) * limit : 0
+  const limit = typeof per_page === "string" ? parseInt(per_page) : 8;
+  const offset = typeof page === "string" ? (parseInt(page) - 1) * limit : 0;
   const activeSubcategory =
-    typeof subcategory === "string" ? subcategory : "decks"
+    typeof subcategory === "string" ? subcategory : "decks";
 
   // const { data, pageCount } = await getProducts({
   //   limit,
@@ -50,8 +48,8 @@ export default async function BuildABoardPage({
   // })
 
   // Get cart items
-  const cartId = cookies().get("cartId")?.value
-  const cartItems = await getCartItems({ cartId })
+  const cartId = cookies().get("cartId")?.value;
+  const cartItems = await getCartItems({ cartId });
 
   return (
     <Shell className="gap-4">
@@ -104,5 +102,5 @@ export default async function BuildABoardPage({
         cartItems={cartItems ?? []}
       /> */}
     </Shell>
-  )
+  );
 }

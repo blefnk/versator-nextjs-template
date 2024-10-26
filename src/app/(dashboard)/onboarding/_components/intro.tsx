@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
-import { useDebounce } from "@/hooks/use-debounce"
-import { Button } from "@/components/ui/button"
+import { useDebounce } from "~/hooks/use-debounce";
+import { Button } from "~/components/ui/button";
 
 export function Intro() {
-  const router = useRouter()
-  const showText = useDebounce(true, 800)
+  const router = useRouter();
+  const showText = useDebounce(true, 800);
 
   return (
     <motion.div
@@ -40,7 +40,7 @@ export function Intro() {
               },
             }}
           >
-            Welcome to Skateshop
+            Welcome to Versator
           </motion.h1>
           <motion.p
             className="max-w-md text-muted-foreground transition-colors sm:text-lg"
@@ -67,12 +67,16 @@ export function Intro() {
               },
             }}
           >
-            <Button onClick={() => router.push("/onboarding?step=create")}>
+            <Button
+              onClick={() => {
+                router.push("/onboarding?step=create");
+              }}
+            >
               Get started
             </Button>
           </motion.div>
         </motion.div>
       )}
     </motion.div>
-  )
+  );
 }

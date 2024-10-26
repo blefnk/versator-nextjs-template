@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import Link from "next/link"
+import Link from "next/link";
 
-import { cn } from "@/lib/utils"
-import { useMediaQuery } from "@/hooks/use-media-query"
-import { Button, type ButtonProps } from "@/components/ui/button"
+import { cn } from "~/lib/utils";
+import { useMediaQuery } from "~/hooks/use-media-query";
+import { Button, type ButtonProps } from "~/components/ui/button";
 import {
   Sheet,
   SheetClose,
   SheetContent,
   SheetTrigger,
-} from "@/components/ui/sheet"
-import { Icons } from "@/components/icons"
+} from "~/components/ui/sheet";
+import { Icons } from "~/components/icons";
 
-import { useSidebar } from "../../../../../components/layouts/sidebar-provider"
+import { useSidebar } from "../../../../../components/layouts/sidebar-provider";
 
 export interface DashboardSidebarSheetProps
   extends React.ComponentPropsWithRef<typeof SheetTrigger>,
@@ -24,10 +24,10 @@ export function DashboardSidebarSheet({
   className,
   ...props
 }: DashboardSidebarSheetProps) {
-  const { open, setOpen } = useSidebar()
-  const isDesktop = useMediaQuery("(min-width: 1024px)")
+  const { open, setOpen } = useSidebar();
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
-  if (isDesktop) return null
+  if (isDesktop) return null;
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -37,7 +37,7 @@ export function DashboardSidebarSheet({
           size="icon"
           className={cn(
             "size-5 hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0",
-            className
+            className,
           )}
           {...props}
         >
@@ -60,5 +60,5 @@ export function DashboardSidebarSheet({
         {children}
       </SheetContent>
     </Sheet>
-  )
+  );
 }

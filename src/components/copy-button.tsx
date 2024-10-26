@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { CheckIcon, CopyIcon } from "@radix-ui/react-icons"
+import * as React from "react";
+import { CheckIcon, CopyIcon } from "@radix-ui/react-icons";
 
-import { Button, type ButtonProps } from "@/components/ui/button"
+import { Button, type ButtonProps } from "~/components/ui/button";
 
 export function CopyButton({ value, ...props }: ButtonProps) {
-  const [isCopied, setIsCopied] = React.useState(false)
+  const [isCopied, setIsCopied] = React.useState(false);
 
   return (
     <Button
@@ -14,10 +14,12 @@ export function CopyButton({ value, ...props }: ButtonProps) {
       size="sm"
       className="absolute right-5 top-4 z-20 size-6 px-0"
       onClick={() => {
-        if (typeof window === "undefined") return
-        setIsCopied(true)
-        void window.navigator.clipboard.writeText(value?.toString() ?? "")
-        setTimeout(() => setIsCopied(false), 2000)
+        if (typeof window === "undefined") return;
+        setIsCopied(true);
+        void window.navigator.clipboard.writeText(value?.toString() ?? "");
+        setTimeout(() => {
+          setIsCopied(false);
+        }, 2000);
       }}
       {...props}
     >
@@ -30,5 +32,5 @@ export function CopyButton({ value, ...props }: ButtonProps) {
         {isCopied ? "Copied" : "Copy to clipboard"}
       </span>
     </Button>
-  )
+  );
 }

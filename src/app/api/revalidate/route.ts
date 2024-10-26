@@ -1,12 +1,12 @@
-import { revalidatePath } from "next/cache"
-import { env } from "@/env"
+import { revalidatePath } from "next/cache";
+import { env } from "~/env";
 
 export async function GET() {
   if (env.NODE_ENV !== "development") {
-    return Response.json({ message: "Not allowed" }, { status: 403 })
+    return Response.json({ message: "Not allowed" }, { status: 403 });
   }
 
-  revalidatePath("/")
+  revalidatePath("/");
 
-  return new Response("revalidated everything", { status: 200 })
+  return new Response("revalidated everything", { status: 200 });
 }

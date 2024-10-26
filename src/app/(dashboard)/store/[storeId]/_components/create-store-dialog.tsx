@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { HoverCardPortal } from "@radix-ui/react-hover-card"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { HoverCardPortal } from "@radix-ui/react-hover-card";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-import { createStore } from "@/lib/actions/store"
-import { type getUserPlanMetrics } from "@/lib/queries/user"
+import { createStore } from "~/lib/actions/store";
+import { type getUserPlanMetrics } from "~/lib/queries/user";
 import {
   createStoreSchema,
   type CreateStoreSchema,
-} from "@/lib/validations/store"
-import { useMediaQuery } from "@/hooks/use-media-query"
-import { Button } from "@/components/ui/button"
+} from "~/lib/validations/store";
+import { useMediaQuery } from "~/hooks/use-media-query";
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -24,7 +24,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "~/components/ui/dialog";
 import {
   Drawer,
   DrawerClose,
@@ -34,21 +34,21 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer"
+} from "~/components/ui/drawer";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/ui/hover-card"
-import { Icons } from "@/components/icons"
-import { RateLimitAlert } from "@/components/rate-limit-alert"
+} from "~/components/ui/hover-card";
+import { Icons } from "~/components/icons";
+import { RateLimitAlert } from "~/components/rate-limit-alert";
 
-import { CreateStoreForm } from "./create-store-form"
+import { CreateStoreForm } from "./create-store-form";
 
 interface CreateStoreDialogProps
   extends React.ComponentPropsWithoutRef<typeof Dialog> {
-  userId: string
-  planMetricsPromise: ReturnType<typeof getUserPlanMetrics>
+  userId: string;
+  planMetricsPromise: ReturnType<typeof getUserPlanMetrics>;
 }
 
 export function CreateStoreDialog({
@@ -57,13 +57,13 @@ export function CreateStoreDialog({
   onOpenChange,
   ...props
 }: CreateStoreDialogProps) {
-  const router = useRouter()
-  const [isCreatePending, startCreateTransaction] = React.useTransition()
-  const isDesktop = useMediaQuery("(min-width: 640px)")
+  const router = useRouter();
+  const [isCreatePending, startCreateTransaction] = React.useTransition();
+  const isDesktop = useMediaQuery("(min-width: 640px)");
 
-  const planMetrics = React.use(planMetricsPromise)
+  const planMetrics = React.use(planMetricsPromise);
   const rateLimitExceeded =
-    planMetrics.storeLimitExceeded || planMetrics.productLimitExceeded
+    planMetrics.storeLimitExceeded || planMetrics.productLimitExceeded;
 
   const form = useForm<CreateStoreSchema>({
     resolver: zodResolver(createStoreSchema),
@@ -71,25 +71,25 @@ export function CreateStoreDialog({
       name: "",
       description: "",
     },
-  })
+  });
 
   function onSubmit(input: CreateStoreSchema) {
     startCreateTransaction(async () => {
-      const { data, error } = await createStore({ ...input, userId })
+      const { data, error } = await createStore({ ...input, userId });
 
       if (error) {
-        toast.error(error)
-        return
+        toast.error(error);
+        return;
       }
 
       if (data) {
-        router.push(`/dashboard/stores/${data.id}`)
-        toast.success("Store created")
+        router.push(`/dashboard/stores/${data.id}`);
+        toast.success("Store created");
       }
 
-      onOpenChange?.(false)
-      form.reset()
-    })
+      onOpenChange?.(false);
+      form.reset();
+    });
   }
 
   if (isDesktop) {
@@ -97,9 +97,9 @@ export function CreateStoreDialog({
       <Dialog
         onOpenChange={(open) => {
           if (!open) {
-            form.reset()
+            form.reset();
           }
-          onOpenChange?.(open)
+          onOpenChange?.(open);
         }}
         {...props}
       >
@@ -108,7 +108,7 @@ export function CreateStoreDialog({
            * If onOpenChange is provided, the drawer is controlled by the parent component.
            * In this case, we don't show the trigger button.
            */
-          !!onOpenChange ? null : rateLimitExceeded ? (
+          onOpenChange ? null : rateLimitExceeded ? (
             <RateLimitHoverCard planMetrics={planMetrics} />
           ) : (
             <DialogTrigger asChild>
@@ -146,20 +146,20 @@ export function CreateStoreDialog({
           </CreateStoreForm>
         </DialogContent>
       </Dialog>
-    )
+    );
   }
 
   return (
     <Drawer
       onOpenChange={(open) => {
         if (!open) {
-          form.reset()
+          form.reset();
         }
-        onOpenChange?.(open)
+        onOpenChange?.(open);
       }}
       {...props}
     >
-      {!!onOpenChange ? null : rateLimitExceeded ? (
+      {onOpenChange ? null : rateLimitExceeded ? (
         <RateLimitHoverCard planMetrics={planMetrics} />
       ) : (
         <DrawerTrigger asChild>
@@ -196,11 +196,11 @@ export function CreateStoreDialog({
         </CreateStoreForm>
       </DrawerContent>
     </Drawer>
-  )
+  );
 }
 
 interface RateLimitHoverCardProps {
-  planMetrics: Awaited<ReturnType<typeof getUserPlanMetrics>>
+  planMetrics: Awaited<ReturnType<typeof getUserPlanMetrics>>;
 }
 
 export function RateLimitHoverCard({ planMetrics }: RateLimitHoverCardProps) {
@@ -224,5 +224,5 @@ export function RateLimitHoverCard({ planMetrics }: RateLimitHoverCardProps) {
         </HoverCardContent>
       </HoverCardPortal>
     </HoverCard>
-  )
+  );
 }

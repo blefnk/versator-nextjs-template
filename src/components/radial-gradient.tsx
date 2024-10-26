@@ -1,6 +1,6 @@
-import { cn } from "@/lib/utils"
+import { cn } from "~/lib/utils";
 
-type Type = "circle" | "ellipse"
+type Type = "circle" | "ellipse";
 
 type Origin =
   | "center"
@@ -11,7 +11,7 @@ type Origin =
   | "top left"
   | "top right"
   | "bottom left"
-  | "bottom right"
+  | "bottom right";
 
 interface RadialGradientProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -19,34 +19,34 @@ interface RadialGradientProps extends React.HTMLAttributes<HTMLDivElement> {
    * @default circle
    * @type string
    */
-  type?: Type
+  type?: Type;
   /**
    * The color to transition from
    * @default #00000000
    * @type string
    * */
-  from?: string
+  from?: string;
 
   /**
    * The color to transition to
    * @default #290A5C
    * @type string
    * */
-  to?: string
+  to?: string;
 
   /**
    * The size of the gradient in pixels
    * @default 300
    * @type number
    * */
-  size?: number
+  size?: number;
 
   /**
    * The origin of the gradient
    * @default center
    * @type string
    * */
-  origin?: Origin
+  origin?: Origin;
 }
 
 export function RadialGradient({
@@ -62,7 +62,7 @@ export function RadialGradient({
     pointerEvents: "none",
     inset: 0,
     backgroundImage: `radial-gradient(${type} ${size}px at ${origin}, ${from}, ${to})`,
-  }
+  };
 
-  return <div className={cn(className)} style={styles} />
+  return <div className={cn(className)} style={styles} />;
 }

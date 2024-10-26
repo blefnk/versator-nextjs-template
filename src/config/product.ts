@@ -1,8 +1,8 @@
-import type { Category, Subcategory } from "@/db/schema"
+import type { Category, Subcategory } from "~/db/schema";
 
-import { generateId } from "@/lib/id"
+import { generateId } from "~/lib/id";
 
-export type ProductConfig = typeof productConfig
+export type ProductConfig = typeof productConfig;
 
 export const productConfig = {
   categories: [
@@ -167,6 +167,6 @@ export const productConfig = {
     subcategories: Omit<
       Subcategory,
       "slug" | "categoryId" | "createdAt" | "updatedAt"
-    >[]
+    >[];
   } & Pick<Category, "id" | "name" | "description" | "image">)[],
-}
+};

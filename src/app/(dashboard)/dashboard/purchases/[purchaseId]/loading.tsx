@@ -1,7 +1,7 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import { PageHeader } from "@/components/page-header"
-import { Shell } from "@/components/shell"
+import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { Skeleton } from "~/components/ui/skeleton";
+import { PageHeader } from "~/components/page-header";
+import { Shell } from "~/components/shell";
 
 export default function PurchaseLoading() {
   return (
@@ -38,5 +38,5 @@ export default function PurchaseLoading() {
         </CardContent>
       </Card>
     </Shell>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-import { type Metadata } from "next"
-import Link from "next/link"
-import { env } from "@/env.js"
+import { type Metadata } from "next";
+import Link from "next/link";
+import { env } from "~/env.js";
 
 import {
   Card,
@@ -9,16 +9,16 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Shell } from "@/components/shell"
-import { OAuthSignIn } from "@/app/(auth)/_components/oauth-signin"
-import { SignUpForm } from "@/app/(auth)/_components/signup-form"
+} from "~/components/ui/card";
+import { Shell } from "~/components/shell";
+import { OAuthSignIn } from "~/app/(auth)/_components/oauth-signin";
+import { SignUpForm } from "~/app/(auth)/_components/signup-form";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "Sign Up",
   description: "Sign up for an account",
-}
+};
 
 export default function SignUpPage() {
   return (
@@ -58,5 +58,5 @@ export default function SignUpPage() {
         </CardFooter>
       </Card>
     </Shell>
-  )
+  );
 }

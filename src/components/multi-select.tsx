@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import type { Option } from "@/types"
-import { Cross2Icon } from "@radix-ui/react-icons"
-import { Command as CommandPrimitive } from "cmdk"
+import * as React from "react";
+import type { Option } from "~/types";
+import { Cross2Icon } from "@radix-ui/react-icons";
+import { Command as CommandPrimitive } from "cmdk";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Command, CommandGroup, CommandItem } from "@/components/ui/command"
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Command, CommandGroup, CommandItem } from "~/components/ui/command";
 
 interface MultiSelectProps {
-  selected: Option[] | null
-  setSelected: React.Dispatch<React.SetStateAction<Option[] | null>>
-  onChange?: (value: Option[] | null) => void
-  placeholder?: string
-  options: Option[]
+  selected: Option[] | null;
+  setSelected: React.Dispatch<React.SetStateAction<Option[] | null>>;
+  onChange?: (value: Option[] | null) => void;
+  placeholder?: string;
+  options: Option[];
 }
 
 export function MultiSelect({
@@ -24,55 +24,55 @@ export function MultiSelect({
   placeholder = "Select options",
   options,
 }: MultiSelectProps) {
-  const inputRef = React.useRef<HTMLInputElement>(null)
-  const [open, setOpen] = React.useState(false)
-  const [query, setQuery] = React.useState("")
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
 
   // Register as input field to be used in react-hook-form
   React.useEffect(() => {
-    if (onChange) onChange(selected?.length ? selected : null)
-  }, [onChange, selected])
+    if (onChange) onChange(selected?.length ? selected : null);
+  }, [onChange, selected]);
 
   const handleSelect = React.useCallback(
     (option: Option) => {
-      setSelected((prev) => [...(prev ?? []), option])
+      setSelected((prev) => [...(prev ?? []), option]);
     },
-    [setSelected]
-  )
+    [setSelected],
+  );
 
   const handleRemove = React.useCallback(
     (option: Option) => {
-      setSelected((prev) => prev?.filter((item) => item !== option) ?? [])
+      setSelected((prev) => prev?.filter((item) => item !== option) ?? []);
     },
-    [setSelected]
-  )
+    [setSelected],
+  );
 
   const handleKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (!inputRef.current) return
+      if (!inputRef.current) return;
 
       if (event.key === "Backspace" || event.key === "Delete") {
-        setSelected((prev) => prev?.slice(0, -1) ?? [])
+        setSelected((prev) => prev?.slice(0, -1) ?? []);
       }
 
       // Blur input on escape
       if (event.key === "Escape") {
-        inputRef.current.blur()
+        inputRef.current.blur();
       }
     },
-    [setSelected]
-  )
+    [setSelected],
+  );
 
   // Memoize filtered options to avoid unnecessary re-renders
   const filteredOptions = React.useMemo(() => {
     return options.filter((option) => {
-      if (selected?.find((item) => item.value === option.value)) return false
+      if (selected?.find((item) => item.value === option.value)) return false;
 
-      if (query.length === 0) return true
+      if (query.length === 0) return true;
 
-      return option.label.toLowerCase().includes(query.toLowerCase())
-    })
-  }, [options, query, selected])
+      return option.label.toLowerCase().includes(query.toLowerCase());
+    });
+  }, [options, query, selected]);
 
   return (
     <Command
@@ -95,21 +95,23 @@ export function MultiSelect({
                   className="ml-2 h-auto bg-transparent p-0 text-primary hover:bg-transparent hover:text-destructive"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      e.preventDefault()
-                      e.stopPropagation()
-                      handleRemove(option)
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleRemove(option);
                     }
                   }}
                   onMouseDown={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
+                    e.preventDefault();
+                    e.stopPropagation();
                   }}
-                  onClick={() => handleRemove(option)}
+                  onClick={() => {
+                    handleRemove(option);
+                  }}
                 >
                   <Cross2Icon className="size-3" aria-hidden="true" />
                 </Button>
               </Badge>
-            )
+            );
           })}
           <CommandPrimitive.Input
             ref={inputRef}
@@ -117,8 +119,12 @@ export function MultiSelect({
             className="flex-1 bg-transparent px-1 py-0.5 outline-none placeholder:text-muted-foreground"
             value={query}
             onValueChange={setQuery}
-            onBlur={() => setOpen(false)}
-            onFocus={() => setOpen(true)}
+            onBlur={() => {
+              setOpen(false);
+            }}
+            onFocus={() => {
+              setOpen(true);
+            }}
           />
         </div>
       </div>
@@ -132,22 +138,22 @@ export function MultiSelect({
                     key={option.value}
                     className="px-2 py-1.5 text-sm"
                     onMouseDown={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
+                      e.preventDefault();
+                      e.stopPropagation();
                     }}
                     onSelect={() => {
-                      handleSelect(option)
-                      setQuery("")
+                      handleSelect(option);
+                      setQuery("");
                     }}
                   >
                     {option.label}
                   </CommandItem>
-                )
+                );
               })}
             </CommandGroup>
           </div>
         ) : null}
       </div>
     </Command>
-  )
+  );
 }

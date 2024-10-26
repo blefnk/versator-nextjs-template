@@ -1,26 +1,26 @@
-"use client"
+"use client";
 
-import React from "react"
-import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
+import React from "react";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
-import { Button } from "@/components/ui/button"
-import { ConnectStoreToStripeButton } from "@/components/connect-store-to-stripe-button"
+import { Button } from "~/components/ui/button";
+import { ConnectStoreToStripeButton } from "~/components/connect-store-to-stripe-button";
 
-import { StepHeader } from "./step-header"
+import { StepHeader } from "./step-header";
 
 interface ConnectStripeProps {
-  storeId: string | null
+  storeId: string | null;
 }
 
 export function ConnectStripe({ storeId }: ConnectStripeProps) {
-  const router = useRouter()
+  const router = useRouter();
 
   React.useEffect(() => {
     if (!storeId) {
-      router.push("/onboarding")
+      router.push("/onboarding");
     }
-  }, [router, storeId])
+  }, [router, storeId]);
 
   return (
     <motion.div
@@ -59,7 +59,9 @@ export function ConnectStripe({ storeId }: ConnectStripeProps) {
             <ConnectStoreToStripeButton storeId={storeId} className="w-full" />
             <Button
               variant="outline"
-              onClick={() => router.push(`/store/${storeId}`)}
+              onClick={() => {
+                router.push(`/store/${storeId}`);
+              }}
               className="w-full"
             >
               Skip for now
@@ -68,5 +70,5 @@ export function ConnectStripe({ storeId }: ConnectStripeProps) {
         )}
       </motion.div>
     </motion.div>
-  )
+  );
 }

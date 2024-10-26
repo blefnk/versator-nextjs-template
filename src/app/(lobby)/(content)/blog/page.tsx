@@ -1,29 +1,29 @@
-import * as React from "react"
-import { type Metadata } from "next"
-import { env } from "@/env.js"
-import { allPosts } from "contentlayer/generated"
+import * as React from "react";
+import { type Metadata } from "next";
+import { env } from "~/env.js";
 
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "~/components/ui/separator";
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/page-header"
-import { Shell } from "@/components/shell"
+} from "~/components/page-header";
+import { Shell } from "~/components/shell";
 
-import { PostCard } from "./_components/post-card"
-import { PostCardSkeleton } from "./_components/post-card-skeleton"
+import { PostCard } from "./_components/post-card";
+import { PostCardSkeleton } from "./_components/post-card-skeleton";
+import { allPosts } from "~/mdx-components";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "Blog",
   description: "Explore the latest news and updates from the community",
-}
+};
 
 export default function BlogPage() {
   const posts = allPosts
     .filter((post) => post.published)
-    .sort((a, b) => b.date.localeCompare(a.date))
+    .sort((a, b) => b.date.localeCompare(a.date));
 
   return (
     <Shell className="md:pb-10">
@@ -46,5 +46,5 @@ export default function BlogPage() {
         </React.Suspense>
       </section>
     </Shell>
-  )
+  );
 }

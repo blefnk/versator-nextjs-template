@@ -1,15 +1,15 @@
-import Image from "next/image"
-import Link from "next/link"
-import { type Post } from "contentlayer/generated"
+import Image from "next/image";
+import Link from "next/link";
+import { type Post } from "~/mdx-components";
 
-import { formatDate } from "@/lib/utils"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { PlaceholderImage } from "@/components/placeholder-image"
+import { formatDate } from "~/lib/utils";
+import { AspectRatio } from "~/components/ui/aspect-ratio";
+import { CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
+import { PlaceholderImage } from "~/components/placeholder-image";
 
 interface PostCardProps {
-  post: Post
-  i: number
+  post: Post;
+  i: number;
 }
 
 export function PostCard({ post, i }: PostCardProps) {
@@ -42,5 +42,5 @@ export function PostCard({ post, i }: PostCardProps) {
         </div>
       </article>
     </Link>
-  )
+  );
 }

@@ -1,8 +1,8 @@
-# [Skateshop](https://skateshop.sadmn.com/)
+# [Versator](https://versator.vercel.app/)
 
-This is an open source e-commerce skateshop build with everything new in Next.js 14. It is bootstrapped with `create-t3-app`.
+Versator is an open-source e-commerce platform built with the latest features in Next.js 15, React 19, TypeScript 5.6, ESLint 9, and more.
 
-[![Skateshop](./public/images/screenshot.png)](https://skateshop.sadmn.com/)
+[![Versator](./public/images/screenshot.png)](https://versator.vercel.app/)
 
 > **Warning**
 > This project is still in development and is not ready for production use.
@@ -17,7 +17,6 @@ This is an open source e-commerce skateshop build with everything new in Next.js
 - **ORM:** [Drizzle ORM](https://orm.drizzle.team)
 - **UI Components:** [shadcn/ui](https://ui.shadcn.com)
 - **Email:** [React Email](https://react.email)
-- **Content Management:** [Contentlayer](https://www.contentlayer.dev)
 - **File Uploads:** [uploadthing](https://uploadthing.com)
 - **Payments infrastructure:** [Stripe](https://stripe.com)
 
@@ -26,7 +25,7 @@ This is an open source e-commerce skateshop build with everything new in Next.js
 - [x] Authentication with **Clerk**
 - [x] File uploads with **uploadthing**
 - [x] Newsletter subscription with **React Email** and **Resend**
-- [x] Blog using **MDX** and **Contentlayer**
+- [x] Blog using **MDX**
 - [x] ORM using **Drizzle ORM**
 - [x] Database on **PlanetScale**
 - [x] Validation with **Zod**
@@ -41,7 +40,7 @@ This is an open source e-commerce skateshop build with everything new in Next.js
 1. Clone the repository
 
    ```bash
-   git clone https://github.com/sadmann7/skateshop.git
+   git clone https://github.com/blefnk/versator.git
    ```
 
 2. Install dependencies using pnpm
@@ -87,8 +86,8 @@ Contributions are welcome! Please open an issue if you have any questions or sug
 Thanks goes to these wonderful people for their contributions:
 
 <p align="center">
- <a href="https://github.com/sadmann7/skateshop/graphs/contributors">
-   <img src="https://contrib.rocks/image?repo=sadmann7/skateshop" />
+ <a href="https://github.com/blefnk/versator/graphs/contributors">
+   <img src="https://contrib.rocks/image?repo=blefnk/versator" />
  </a>
 </p>
 

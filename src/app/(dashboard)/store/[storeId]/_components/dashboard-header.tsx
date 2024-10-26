@@ -1,11 +1,11 @@
-import type { User } from "@clerk/nextjs/server"
+import type { User } from "@clerk/nextjs/server";
 
-import { AuthDropdown } from "@/components/layouts/auth-dropdown"
+import { AuthDropdown } from "~/components/layouts/auth-dropdown";
 
 interface DashboardHeaderProps {
-  user: User
-  storeId: string
-  children: React.ReactNode
+  user: User;
+  storeId: string;
+  children: React.ReactNode;
 }
 
 export function DashboardHeader({
@@ -24,5 +24,5 @@ export function DashboardHeader({
         </div>
       </div>
     </header>
-  )
+  );
 }

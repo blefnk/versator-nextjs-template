@@ -1,31 +1,31 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { motion } from "framer-motion"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
+import * as React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-import { createStore } from "@/lib/actions/store"
+import { createStore } from "~/lib/actions/store";
 import {
   createStoreSchema,
   type CreateStoreSchema,
-} from "@/lib/validations/store"
-import { Button } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
+} from "~/lib/validations/store";
+import { Button } from "~/components/ui/button";
+import { Icons } from "~/components/icons";
 
-import { CreateStoreForm } from "../../store/[storeId]/_components/create-store-form"
-import { StepHeader } from "./step-header"
+import { CreateStoreForm } from "../../store/[storeId]/_components/create-store-form";
+import { StepHeader } from "./step-header";
 
 interface CreateStoreProps {
-  userId: string
+  userId: string;
 }
 
 export function CreateStore({ userId }: CreateStoreProps) {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const [isCreatePending, startCreateTransaction] = React.useTransition()
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [isCreatePending, startCreateTransaction] = React.useTransition();
 
   const form = useForm<CreateStoreSchema>({
     resolver: zodResolver(createStoreSchema),
@@ -33,26 +33,26 @@ export function CreateStore({ userId }: CreateStoreProps) {
       name: "",
       description: "",
     },
-  })
+  });
 
   function onSubmit(input: CreateStoreSchema) {
     startCreateTransaction(async () => {
-      const { data, error } = await createStore({ ...input, userId })
+      const { data, error } = await createStore({ ...input, userId });
 
       if (error) {
-        toast.error(error)
-        return
+        toast.error(error);
+        return;
       }
 
       if (data) {
-        const newSearchParams = new URLSearchParams(searchParams)
-        newSearchParams.set("step", "connect")
-        newSearchParams.set("store", data.id)
-        router.push(`/onboarding?${newSearchParams.toString()}`)
+        const newSearchParams = new URLSearchParams(searchParams);
+        newSearchParams.set("step", "connect");
+        newSearchParams.set("store", data.id);
+        router.push(`/onboarding?${newSearchParams.toString()}`);
       }
 
-      form.reset()
-    })
+      form.reset();
+    });
   }
 
   return (
@@ -97,5 +97,5 @@ export function CreateStore({ userId }: CreateStoreProps) {
         </motion.div>
       </motion.div>
     </motion.div>
-  )
+  );
 }

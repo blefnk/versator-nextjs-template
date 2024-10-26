@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
-import { seedProducts } from "@/lib/actions/seed"
-import { cn } from "@/lib/utils"
-import { Button, type ButtonProps } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
+import { seedProducts } from "~/lib/actions/seed";
+import { cn } from "~/lib/utils";
+import { Button, type ButtonProps } from "~/components/ui/button";
+import { Icons } from "~/components/icons";
 
 interface SeedProductsProps extends ButtonProps {
-  storeId: string
-  count?: number
+  storeId: string;
+  count?: number;
 }
 
 export function SeedProducts({
@@ -19,7 +19,7 @@ export function SeedProducts({
   className,
   ...props
 }: SeedProductsProps) {
-  const [isPending, startTransition] = React.useTransition()
+  const [isPending, startTransition] = React.useTransition();
 
   return (
     <Button
@@ -30,9 +30,9 @@ export function SeedProducts({
           await seedProducts({
             storeId,
             count,
-          })
-          toast.success("Products seeded successfully.")
-        })
+          });
+          toast.success("Products seeded successfully.");
+        });
       }}
       {...props}
       disabled={isPending}
@@ -40,5 +40,5 @@ export function SeedProducts({
       {isPending && <Icons.spinner className="mr-2 size-4 animate-spin" />}
       Seed products
     </Button>
-  )
+  );
 }

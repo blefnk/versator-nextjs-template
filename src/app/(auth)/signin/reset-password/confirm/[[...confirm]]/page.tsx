@@ -1,5 +1,5 @@
-import { type Metadata } from "next"
-import { env } from "@/env.js"
+import { type Metadata } from "next";
+import { env } from "~/env.js";
 
 import {
   Card,
@@ -7,15 +7,15 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Shell } from "@/components/shell"
-import { ResetPasswordConfirmForm } from "@/app/(auth)/_components/reset-password-confirm-form"
+} from "~/components/ui/card";
+import { Shell } from "~/components/shell";
+import { ResetPasswordConfirmForm } from "~/app/(auth)/_components/reset-password-confirm-form";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "Reset Password",
   description: "Enter your email to reset your password",
-}
+};
 
 export default function ResetPasswordConfirmPage() {
   return (
@@ -32,5 +32,5 @@ export default function ResetPasswordConfirmPage() {
         </CardContent>
       </Card>
     </Shell>
-  )
+  );
 }

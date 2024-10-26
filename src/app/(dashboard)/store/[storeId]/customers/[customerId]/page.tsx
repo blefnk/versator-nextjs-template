@@ -1,42 +1,42 @@
-import * as React from "react"
-import { type Metadata } from "next"
-import { notFound } from "next/navigation"
-import { db } from "@/db"
-import { orders, stores, type Order } from "@/db/schema"
-import { env } from "@/env.js"
-import type { SearchParams } from "@/types"
-import { and, asc, desc, eq, gte, inArray, lte, sql } from "drizzle-orm"
+import * as React from "react";
+import { type Metadata } from "next";
+import { notFound } from "next/navigation";
+import { db } from "~/db";
+import { orders, stores, type Order } from "~/db/schema";
+import { env } from "~/env.js";
+import type { SearchParams } from "~/types";
+import { and, asc, desc, eq, gte, inArray, lte, sql } from "drizzle-orm";
 
-import { customerSearchParamsSchema } from "@/lib/validations/params"
-import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton"
-import { DateRangePicker } from "@/components/date-range-picker"
-import { OrdersTable } from "@/components/tables/orders-table"
+import { customerSearchParamsSchema } from "~/lib/validations/params";
+import { DataTableSkeleton } from "~/components/data-table/data-table-skeleton";
+import { DateRangePicker } from "~/components/date-range-picker";
+import { OrdersTable } from "~/components/tables/orders-table";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "Customer's Orders",
   description: "View the customer's order details",
-}
+};
 
 interface CustomerPageProps {
   params: {
-    storeId: string
-    customerId: string
-  }
-  searchParams: SearchParams
+    storeId: string;
+    customerId: string;
+  };
+  searchParams: SearchParams;
 }
 
 export default async function CustomerPage({
   params,
   searchParams,
 }: CustomerPageProps) {
-  const storeId = decodeURIComponent(params.storeId)
+  const storeId = decodeURIComponent(params.storeId);
   // Get email from the customer id
-  const emailParts = params.customerId.split("-")
-  const email = `${emailParts[0]}@${emailParts[2]}.com`
+  const emailParts = params.customerId.split("-");
+  const email = `${emailParts[0]}@${emailParts[2]}.com`;
 
   const { page, per_page, sort, status, from, to } =
-    customerSearchParamsSchema.parse(searchParams)
+    customerSearchParamsSchema.parse(searchParams);
 
   const store = await db.query.stores.findFirst({
     where: eq(stores.id, storeId),
@@ -44,27 +44,27 @@ export default async function CustomerPage({
       id: true,
       name: true,
     },
-  })
+  });
 
   if (!store) {
-    notFound()
+    notFound();
   }
 
   // Fallback page for invalid page numbers
-  const fallbackPage = isNaN(page) || page < 1 ? 1 : page
+  const fallbackPage = isNaN(page) || page < 1 ? 1 : page;
   // Number of items per page
-  const limit = isNaN(per_page) ? 10 : per_page
+  const limit = isNaN(per_page) ? 10 : per_page;
   // Number of items to skip
-  const offset = fallbackPage > 0 ? (fallbackPage - 1) * limit : 0
+  const offset = fallbackPage > 0 ? (fallbackPage - 1) * limit : 0;
   // Column and order to sort by
-  const [column, order] = (sort?.split(".") as [
+  const [column, order] = (sort.split(".") as [
     keyof Order | undefined,
     "asc" | "desc" | undefined,
-  ]) ?? ["createdAt", "desc"]
+  ]) ?? ["createdAt", "desc"];
 
-  const statuses = status ? status.split(".") : []
-  const fromDay = from ? new Date(from) : undefined
-  const toDay = to ? new Date(to) : undefined
+  const statuses = status ? status.split(".") : [];
+  const fromDay = from ? new Date(from) : undefined;
+  const toDay = to ? new Date(to) : undefined;
 
   // Transaction is used to ensure both queries are executed in a single transaction
   const ordersPromise = db.transaction(async (tx) => {
@@ -95,18 +95,18 @@ export default async function CustomerPage({
             fromDay && toDay
               ? and(
                   gte(orders.createdAt, fromDay),
-                  lte(orders.createdAt, toDay)
+                  lte(orders.createdAt, toDay),
                 )
-              : undefined
-          )
+              : undefined,
+          ),
         )
         .orderBy(
           column && column in orders
             ? order === "asc"
               ? asc(orders[column])
               : desc(orders[column])
-            : desc(orders.createdAt)
-        )
+            : desc(orders.createdAt),
+        );
 
       const count = await tx
         .select({
@@ -125,28 +125,28 @@ export default async function CustomerPage({
             fromDay && toDay
               ? and(
                   gte(orders.createdAt, fromDay),
-                  lte(orders.createdAt, toDay)
+                  lte(orders.createdAt, toDay),
                 )
-              : undefined
-          )
+              : undefined,
+          ),
         )
         .execute()
-        .then((res) => res[0]?.count ?? 0)
+        .then((res) => res[0]?.count ?? 0);
 
-      const pageCount = Math.ceil(count / limit)
+      const pageCount = Math.ceil(count / limit);
 
       return {
         data,
         pageCount,
-      }
+      };
     } catch (err) {
-      console.error(err)
+      console.error(err);
       return {
         data: [],
         pageCount: 0,
-      }
+      };
     }
-  })
+  });
 
   return (
     <div className="space-y-6">
@@ -164,5 +164,5 @@ export default async function CustomerPage({
         />
       </React.Suspense>
     </div>
-  )
+  );
 }

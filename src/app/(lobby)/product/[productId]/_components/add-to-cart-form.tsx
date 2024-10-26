@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { MinusIcon, PlusIcon } from "@radix-ui/react-icons"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
-import type { z } from "zod"
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import type { z } from "zod";
 
-import { addToCart } from "@/lib/actions/cart"
-import { showErrorToast } from "@/lib/handle-error"
-import { cn } from "@/lib/utils"
-import { updateCartItemSchema } from "@/lib/validations/cart"
-import { Button } from "@/components/ui/button"
+import { addToCart } from "~/lib/actions/cart";
+import { showErrorToast } from "~/lib/handle-error";
+import { cn } from "~/lib/utils";
+import { updateCartItemSchema } from "~/lib/validations/cart";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -20,22 +20,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Icons } from "@/components/icons"
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { Icons } from "~/components/icons";
 
 interface AddToCartFormProps {
-  productId: string
-  showBuyNow?: boolean
+  productId: string;
+  showBuyNow?: boolean;
 }
 
-type Inputs = z.infer<typeof updateCartItemSchema>
+type Inputs = z.infer<typeof updateCartItemSchema>;
 
 export function AddToCartForm({ productId, showBuyNow }: AddToCartFormProps) {
-  const id = React.useId()
-  const router = useRouter()
-  const [isAddingToCart, setIsAddingToCart] = React.useState(false)
-  const [isBuyingNow, setIsBuyingNow] = React.useState(false)
+  const id = React.useId();
+  const router = useRouter();
+  const [isAddingToCart, setIsAddingToCart] = React.useState(false);
+  const [isBuyingNow, setIsBuyingNow] = React.useState(false);
 
   // react-hook-form
   const form = useForm<Inputs>({
@@ -43,23 +43,23 @@ export function AddToCartForm({ productId, showBuyNow }: AddToCartFormProps) {
     defaultValues: {
       quantity: 1,
     },
-  })
+  });
 
   async function onSubmit(data: Inputs) {
-    setIsAddingToCart(true)
+    setIsAddingToCart(true);
     const { error } = await addToCart({
       productId,
       quantity: data.quantity,
-    })
+    });
 
     if (error) {
-      showErrorToast(error)
-      return
+      showErrorToast(error);
+      return;
     }
 
-    toast.success("Product added to cart")
+    toast.success("Product added to cart");
 
-    setIsAddingToCart(false)
+    setIsAddingToCart(false);
   }
 
   return (
@@ -67,7 +67,7 @@ export function AddToCartForm({ productId, showBuyNow }: AddToCartFormProps) {
       <form
         className={cn(
           "flex max-w-[260px] gap-4",
-          showBuyNow ? "flex-col" : "flex-row"
+          showBuyNow ? "flex-col" : "flex-row",
         )}
         onSubmit={form.handleSubmit(onSubmit)}
       >
@@ -78,12 +78,12 @@ export function AddToCartForm({ productId, showBuyNow }: AddToCartFormProps) {
             variant="outline"
             size="icon"
             className="size-8 shrink-0 rounded-r-none"
-            onClick={() =>
+            onClick={() => {
               form.setValue(
                 "quantity",
-                Math.max(0, form.getValues("quantity") - 1)
-              )
-            }
+                Math.max(0, form.getValues("quantity") - 1),
+              );
+            }}
             disabled={isAddingToCart}
           >
             <MinusIcon className="size-3" aria-hidden="true" />
@@ -103,10 +103,10 @@ export function AddToCartForm({ productId, showBuyNow }: AddToCartFormProps) {
                     className="h-8 w-16 rounded-none border-x-0"
                     {...field}
                     onChange={(e) => {
-                      const value = e.target.value
-                      const parsedValue = parseInt(value, 10)
-                      if (isNaN(parsedValue)) return
-                      field.onChange(parsedValue)
+                      const value = e.target.value;
+                      const parsedValue = parseInt(value, 10);
+                      if (isNaN(parsedValue)) return;
+                      field.onChange(parsedValue);
                     }}
                   />
                 </FormControl>
@@ -120,9 +120,9 @@ export function AddToCartForm({ productId, showBuyNow }: AddToCartFormProps) {
             variant="outline"
             size="icon"
             className="size-8 shrink-0 rounded-l-none"
-            onClick={() =>
-              form.setValue("quantity", form.getValues("quantity") + 1)
-            }
+            onClick={() => {
+              form.setValue("quantity", form.getValues("quantity") + 1);
+            }}
             disabled={isAddingToCart}
           >
             <PlusIcon className="size-3" aria-hidden="true" />
@@ -137,20 +137,20 @@ export function AddToCartForm({ productId, showBuyNow }: AddToCartFormProps) {
               size="sm"
               className="w-full"
               onClick={async () => {
-                setIsBuyingNow(true)
+                setIsBuyingNow(true);
 
                 const { error } = await addToCart({
                   productId,
                   quantity: form.getValues("quantity"),
-                })
+                });
 
                 if (error) {
-                  showErrorToast(error)
-                  return
+                  showErrorToast(error);
+                  return;
                 }
 
-                router.push("/cart")
-                setIsBuyingNow(false)
+                router.push("/cart");
+                setIsBuyingNow(false);
               }}
               disabled={isBuyingNow}
             >
@@ -182,5 +182,5 @@ export function AddToCartForm({ productId, showBuyNow }: AddToCartFormProps) {
         </div>
       </form>
     </Form>
-  )
+  );
 }

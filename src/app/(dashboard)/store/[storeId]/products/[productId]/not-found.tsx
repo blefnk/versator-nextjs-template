@@ -1,14 +1,14 @@
-import { ErrorCard } from "@/components/error-card"
-import { Shell } from "@/components/shell"
+import { ErrorCard } from "~/components/error-card";
+import { Shell } from "~/components/shell";
 
 interface ProductNotFoundProps {
   params: {
-    storeId: string
-  }
+    storeId: string;
+  };
 }
 
 export default function ProductNotFound({ params }: ProductNotFoundProps) {
-  const storeId = Number(params.storeId)
+  const storeId = Number(params.storeId);
 
   return (
     <Shell variant="centered" className="max-w-md">
@@ -19,5 +19,5 @@ export default function ProductNotFound({ params }: ProductNotFoundProps) {
         retryLinkText="Go to Products"
       />
     </Shell>
-  )
+  );
 }

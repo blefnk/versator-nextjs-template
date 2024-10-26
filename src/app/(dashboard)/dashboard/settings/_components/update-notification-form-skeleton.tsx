@@ -1,4 +1,4 @@
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from "~/components/ui/skeleton";
 
 export function UpdateNotificationFormSkeleton() {
   return (
@@ -17,5 +17,5 @@ export function UpdateNotificationFormSkeleton() {
       ))}
       <Skeleton className="h-8 w-24" />
     </div>
-  )
+  );
 }

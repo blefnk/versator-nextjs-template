@@ -1,38 +1,38 @@
-import * as React from "react"
-import type { Metadata } from "next"
-import { redirect } from "next/navigation"
-import { env } from "@/env.js"
-import { RocketIcon } from "@radix-ui/react-icons"
+import * as React from "react";
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { env } from "~/env.js";
+import { RocketIcon } from "@radix-ui/react-icons";
 
-import { getPlan, getPlans } from "@/lib/actions/stripe"
-import { getCachedUser, getUserUsageMetrics } from "@/lib/queries/user"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { getPlan, getPlans } from "~/lib/actions/stripe";
+import { getCachedUser, getUserUsageMetrics } from "~/lib/queries/user";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/page-header"
-import { Shell } from "@/components/shell"
+} from "~/components/page-header";
+import { Shell } from "~/components/shell";
 
-import { Billing } from "./_components/billing"
-import { BillingSkeleton } from "./_components/billing-skeleton"
+import { Billing } from "./_components/billing";
+import { BillingSkeleton } from "./_components/billing-skeleton";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "Billing",
   description: "Manage your billing and subscription plan",
-}
+};
 
 export default async function BillingPage() {
-  const user = await getCachedUser()
+  const user = await getCachedUser();
 
   if (!user) {
-    redirect("/signin")
+    redirect("/signin");
   }
 
-  const planPromise = getPlan({ userId: user.id })
-  const plansPromise = getPlans()
-  const usageMetricsPromise = getUserUsageMetrics({ userId: user.id })
+  const planPromise = getPlan({ userId: user.id });
+  const plansPromise = getPlans();
+  const usageMetricsPromise = getUserUsageMetrics({ userId: user.id });
 
   return (
     <Shell variant="sidebar">
@@ -46,8 +46,8 @@ export default async function BillingPage() {
         <RocketIcon className="size-4" />
         <AlertTitle>Heads up!</AlertTitle>
         <AlertDescription>
-          Skateshop is a demo app using a Stripe test environment. You can find
-          a list of test card numbers on the{" "}
+          Versator is a demo app using a Stripe test environment. You can find a
+          list of test card numbers on the{" "}
           <a
             href="https://stripe.com/docs/testing"
             target="_blank"
@@ -67,5 +67,5 @@ export default async function BillingPage() {
         />
       </React.Suspense>
     </Shell>
-  )
+  );
 }

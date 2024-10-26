@@ -1,9 +1,9 @@
-import "@/styles/mdx.css"
+import "~/styles/mdx.css";
 
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { Separator } from "@/components/ui/separator"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Shell } from "@/components/shell"
+import { AspectRatio } from "~/components/ui/aspect-ratio";
+import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Shell } from "~/components/shell";
 
 export default function PostLoading() {
   return (
@@ -39,5 +39,5 @@ export default function PostLoading() {
       </div>
       <Skeleton className="mx-auto mt-4 h-6 w-28" />
     </Shell>
-  )
+  );
 }

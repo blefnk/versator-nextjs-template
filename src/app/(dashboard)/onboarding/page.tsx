@@ -1,24 +1,24 @@
-import * as React from "react"
-import { type Metadata } from "next"
-import { redirect } from "next/navigation"
-import { auth } from "@clerk/nextjs/server"
+import * as React from "react";
+import { type Metadata } from "next";
+import { redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
 
-import { Skeleton } from "@/components/ui/skeleton"
-import { GridPattern } from "@/components/grid-pattern"
-import { Shell } from "@/components/shell"
+import { Skeleton } from "~/components/ui/skeleton";
+import { GridPattern } from "~/components/grid-pattern";
+import { Shell } from "~/components/shell";
 
-import { Onboarding } from "./_components/onboarding"
+import { Onboarding } from "./_components/onboarding";
 
 export const metadata: Metadata = {
   title: "Onboarding",
   description: "Get started with your new store",
-}
+};
 
 export default function OnboardingPage() {
-  const { userId } = auth()
+  const { userId } = auth();
 
   if (!userId) {
-    redirect("/signin")
+    redirect("/signin");
   }
 
   return (
@@ -35,5 +35,5 @@ export default function OnboardingPage() {
         <Onboarding userId={userId} />
       </React.Suspense>
     </Shell>
-  )
+  );
 }

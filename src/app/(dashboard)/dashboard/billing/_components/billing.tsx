@@ -1,12 +1,12 @@
-import Link from "next/link"
-import type { PlanWithPrice, UserPlan } from "@/types"
-import { CheckIcon } from "@radix-ui/react-icons"
+import Link from "next/link";
+import type { PlanWithPrice, UserPlan } from "~/types";
+import { CheckIcon } from "@radix-ui/react-icons";
 
-import { type getUserUsageMetrics } from "@/lib/queries/user"
-import { getPlanLimits } from "@/lib/subscription"
-import { cn, formatDate } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { type getUserUsageMetrics } from "~/lib/queries/user";
+import { getPlanLimits } from "~/lib/subscription";
+import { cn, formatDate } from "~/lib/utils";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -14,14 +14,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { ManagePlanForm } from "@/components/manage-plan-form"
-import { UsageCard } from "@/components/usage-card"
+} from "~/components/ui/card";
+import { ManagePlanForm } from "~/components/manage-plan-form";
+import { UsageCard } from "~/components/usage-card";
 
 interface BillingProps {
-  planPromise: Promise<UserPlan | null>
-  plansPromise: Promise<PlanWithPrice[]>
-  usageMetricsPromise: ReturnType<typeof getUserUsageMetrics>
+  planPromise: Promise<UserPlan | null>;
+  plansPromise: Promise<PlanWithPrice[]>;
+  usageMetricsPromise: ReturnType<typeof getUserUsageMetrics>;
 }
 
 export async function Billing({
@@ -33,11 +33,11 @@ export async function Billing({
     planPromise,
     plansPromise,
     usageMetricsPromise,
-  ])
+  ]);
 
   const { storeLimit, productLimit } = getPlanLimits({
     planId: plan?.id,
-  })
+  });
 
   return (
     <>
@@ -132,5 +132,5 @@ export async function Billing({
         ))}
       </section>
     </>
-  )
+  );
 }

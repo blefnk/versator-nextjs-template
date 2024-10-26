@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useRouter } from "next/navigation"
-import { type Product } from "@/db/schema"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { type Product } from "~/db/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-import { deleteProduct, updateProduct } from "@/lib/actions/product"
-import { getErrorMessage } from "@/lib/handle-error"
+import { deleteProduct, updateProduct } from "~/lib/actions/product";
+import { getErrorMessage } from "~/lib/handle-error";
 import {
   type getCategories,
   type getSubcategories,
-} from "@/lib/queries/product"
+} from "~/lib/queries/product";
 import {
   updateProductSchema,
   type UpdateProductSchema,
-} from "@/lib/validations/product"
-import { useUploadFile } from "@/hooks/use-upload-file"
-import { Button } from "@/components/ui/button"
+} from "~/lib/validations/product";
+import { useUploadFile } from "~/hooks/use-upload-file";
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -26,7 +26,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "~/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -35,8 +35,8 @@ import {
   FormLabel,
   FormMessage,
   UncontrolledFormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -44,35 +44,35 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { FileUploader } from "@/components/file-uploader"
-import { Files } from "@/components/files"
-import { Icons } from "@/components/icons"
+} from "~/components/ui/select";
+import { Textarea } from "~/components/ui/textarea";
+import { FileUploader } from "~/components/file-uploader";
+import { Files } from "~/components/files";
+import { Icons } from "~/components/icons";
 
 interface UpdateProductFormProps {
-  product: Product
+  product: Product;
   promises: Promise<{
-    categories: Awaited<ReturnType<typeof getCategories>>
-    subcategories: Awaited<ReturnType<typeof getSubcategories>>
-  }>
+    categories: Awaited<ReturnType<typeof getCategories>>;
+    subcategories: Awaited<ReturnType<typeof getSubcategories>>;
+  }>;
 }
 
 export function UpdateProductForm({
   product,
   promises,
 }: UpdateProductFormProps) {
-  const { categories, subcategories } = React.use(promises)
+  const { categories, subcategories } = React.use(promises);
 
-  const router = useRouter()
-  const [isUpdating, setIsUpdating] = React.useState(false)
-  const [isDeleting, setIsDeleting] = React.useState(false)
+  const router = useRouter();
+  const [isUpdating, setIsUpdating] = React.useState(false);
+  const [isDeleting, setIsDeleting] = React.useState(false);
   const { uploadFiles, progresses, uploadedFiles, isUploading } = useUploadFile(
     "productImage",
     {
       defaultUploadedFiles: product.images ?? [],
-    }
-  )
+    },
+  );
 
   const form = useForm<UpdateProductSchema>({
     resolver: zodResolver(updateProductSchema),
@@ -84,10 +84,10 @@ export function UpdateProductForm({
       price: product.price,
       inventory: product.inventory,
     },
-  })
+  });
 
   function onSubmit(input: UpdateProductSchema) {
-    setIsUpdating(true)
+    setIsUpdating(true);
 
     toast.promise(
       uploadFiles(input.images ?? []).then(() => {
@@ -95,21 +95,21 @@ export function UpdateProductForm({
           ...input,
           storeId: product.storeId,
           id: product.id,
-        })
+        });
       }),
       {
         loading: "Uploading images...",
         success: () => {
-          form.reset()
-          setIsUpdating(false)
-          return "Images uploaded"
+          form.reset();
+          setIsUpdating(false);
+          return "Images uploaded";
         },
         error: (err) => {
-          setIsUpdating(false)
-          return getErrorMessage(err)
+          setIsUpdating(false);
+          return getErrorMessage(err);
         },
-      }
-    )
+      },
+    );
   }
 
   return (
@@ -158,9 +158,9 @@ export function UpdateProductForm({
                 <FormControl>
                   <Select
                     value={field.value}
-                    onValueChange={(value: typeof field.value) =>
-                      field.onChange(value)
-                    }
+                    onValueChange={(value: typeof field.value) => {
+                      field.onChange(value);
+                    }}
                     defaultValue={product.categoryId}
                   >
                     <SelectTrigger className="capitalize">
@@ -297,7 +297,7 @@ export function UpdateProductForm({
           <Button
             variant="destructive"
             onClick={() => {
-              setIsDeleting(true)
+              setIsDeleting(true);
 
               toast.promise(
                 deleteProduct({
@@ -307,17 +307,19 @@ export function UpdateProductForm({
                 {
                   loading: "Deleting product...",
                   success: () => {
-                    void form.trigger(["name", "price", "inventory"])
-                    router.push(`/dashboard/stores/${product.storeId}/products`)
-                    setIsDeleting(false)
-                    return "Product deleted"
+                    void form.trigger(["name", "price", "inventory"]);
+                    router.push(
+                      `/dashboard/stores/${product.storeId}/products`,
+                    );
+                    setIsDeleting(false);
+                    return "Product deleted";
                   },
                   error: (err) => {
-                    setIsDeleting(false)
-                    return getErrorMessage(err)
+                    setIsDeleting(false);
+                    return getErrorMessage(err);
                   },
-                }
-              )
+                },
+              );
             }}
             disabled={isDeleting}
           >
@@ -333,5 +335,5 @@ export function UpdateProductForm({
         </div>
       </form>
     </Form>
-  )
+  );
 }

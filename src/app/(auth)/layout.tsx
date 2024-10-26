@@ -1,8 +1,8 @@
-import Image from "next/image"
-import Link from "next/link"
+import Image from "next/image";
+import Link from "next/link";
 
-import { siteConfig } from "@/config/site"
-import { Icons } from "@/components/icons"
+import { siteConfig } from "~/config/site";
+import { Icons } from "~/components/icons";
 
 export default function AuthLayout({ children }: React.PropsWithChildren) {
   return (
@@ -45,5 +45,5 @@ export default function AuthLayout({ children }: React.PropsWithChildren) {
         </div>
       </div>
     </div>
-  )
+  );
 }

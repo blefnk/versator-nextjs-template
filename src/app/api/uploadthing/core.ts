@@ -1,10 +1,10 @@
-import { currentUser } from "@clerk/nextjs/server"
-import { createUploadthing, type FileRouter } from "uploadthing/next"
-import { UploadThingError } from "uploadthing/server"
+import { currentUser } from "@clerk/nextjs/server";
+import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { UploadThingError } from "uploadthing/server";
 
-import { ratelimit } from "@/lib/rate-limit"
+import { ratelimit } from "~/lib/rate-limit";
 
-const f = createUploadthing()
+const f = createUploadthing();
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
@@ -15,31 +15,31 @@ export const ourFileRouter = {
       // This code runs on your server before upload
 
       // Rate limit the upload
-      const ip = req.ip ?? "127.0.0.1"
+      const ip = req.ip ?? "127.0.0.1";
 
-      const { success } = await ratelimit.limit(ip)
+      const { success } = await ratelimit.limit(ip);
 
       if (!success) {
-        throw new UploadThingError("Rate limit exceeded")
+        throw new UploadThingError("Rate limit exceeded");
       }
 
-      const user = await currentUser()
+      const user = await currentUser();
 
       // If you throw, the user will not be able to upload
-      if (!user) throw new UploadThingError("Unauthorized")
+      if (!user) throw new UploadThingError("Unauthorized");
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: user.id }
+      return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      console.log("Upload complete for userId:", metadata.userId)
+      console.log("Upload complete for userId:", metadata.userId);
 
-      console.log("file url", file.url)
+      console.log("file url", file.url);
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId }
+      return { uploadedBy: metadata.userId };
     }),
-} satisfies FileRouter
+} satisfies FileRouter;
 
-export type OurFileRouter = typeof ourFileRouter
+export type OurFileRouter = typeof ourFileRouter;

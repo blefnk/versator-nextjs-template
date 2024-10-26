@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { type Product } from "@/db/schema"
-import { ChevronDownIcon } from "@radix-ui/react-icons"
-import { toast } from "sonner"
+import * as React from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { type Product } from "~/db/schema";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { toast } from "sonner";
 
-import { queryConfig } from "@/config/query"
-import { addToCart, deleteCartItem } from "@/lib/actions/cart"
-import { showErrorToast } from "@/lib/handle-error"
-import { cn } from "@/lib/utils"
-import { type CartItemSchema } from "@/lib/validations/cart"
-import { useDebounce } from "@/hooks/use-debounce"
-import { Button } from "@/components/ui/button"
-import { Card, CardDescription } from "@/components/ui/card"
+import { queryConfig } from "~/config/query";
+import { addToCart, deleteCartItem } from "~/lib/actions/cart";
+import { showErrorToast } from "~/lib/handle-error";
+import { cn } from "~/lib/utils";
+import { type CartItemSchema } from "~/lib/validations/cart";
+import { useDebounce } from "~/hooks/use-debounce";
+import { Button } from "~/components/ui/button";
+import { Card, CardDescription } from "~/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,10 +21,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
+} from "~/components/ui/dropdown-menu";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { Separator } from "~/components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -32,17 +32,17 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
-import { Slider } from "@/components/ui/slider"
-import { Switch } from "@/components/ui/switch"
-import { PaginationButton } from "@/components/pagination-button"
-import { ProductCard } from "@/components/product-card"
+} from "~/components/ui/sheet";
+import { Slider } from "~/components/ui/slider";
+import { Switch } from "~/components/ui/switch";
+import { PaginationButton } from "~/components/pagination-button";
+import { ProductCard } from "~/components/product-card";
 
 interface BoardBuilderProps {
-  products: Product[]
-  pageCount: number
-  subcategory: string | null
-  cartItems: CartItemSchema[]
+  products: Product[];
+  pageCount: number;
+  subcategory: string | null;
+  cartItems: CartItemSchema[];
 }
 
 export function BoardBuilder({
@@ -51,42 +51,44 @@ export function BoardBuilder({
   subcategory,
   cartItems,
 }: BoardBuilderProps) {
-  const id = React.useId()
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const [isPending, startTransition] = React.useTransition()
+  const id = React.useId();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [isPending, startTransition] = React.useTransition();
 
   // Search params
-  const page = searchParams?.get("page") ?? "1"
-  const per_page = searchParams?.get("per_page") ?? "8"
-  const sort = searchParams?.get("sort") ?? "createdAt.desc"
-  const active = searchParams?.get("active") ?? "true"
+  const page = searchParams.get("page") ?? "1";
+  const per_page = searchParams.get("per_page") ?? "8";
+  const sort = searchParams.get("sort") ?? "createdAt.desc";
+  const active = searchParams.get("active") ?? "true";
 
   // Create query string
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
-      const newSearchParams = new URLSearchParams(searchParams?.toString())
+      const newSearchParams = new URLSearchParams(searchParams.toString());
 
       for (const [key, value] of Object.entries(params)) {
         if (value === null) {
-          newSearchParams.delete(key)
+          newSearchParams.delete(key);
         } else {
-          newSearchParams.set(key, String(value))
+          newSearchParams.set(key, String(value));
         }
       }
 
-      return newSearchParams.toString()
+      return newSearchParams.toString();
     },
-    [searchParams]
-  )
+    [searchParams],
+  );
 
   // Price filter
-  const [priceRange, setPriceRange] = React.useState<[number, number]>([0, 500])
-  const debouncedPrice = useDebounce(priceRange, 500)
+  const [priceRange, setPriceRange] = React.useState<[number, number]>([
+    0, 500,
+  ]);
+  const debouncedPrice = useDebounce(priceRange, 500);
 
   React.useEffect(() => {
-    const [min, max] = debouncedPrice
+    const [min, max] = debouncedPrice;
     startTransition(() => {
       router.push(
         `${pathname}?${createQueryString({
@@ -94,51 +96,50 @@ export function BoardBuilder({
         })}`,
         {
           scroll: false,
-        }
-      )
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedPrice])
+        },
+      );
+    });
+  }, [debouncedPrice]);
 
   // Add product to cart
   const addProductToCart = React.useCallback(
     async (product: Product) => {
       try {
         const hasProductInCart = cartItems.some(
-          (item) => item.productId === product.id
-        )
+          (item) => item.productId === product.id,
+        );
 
         // Only allow one product per subcategory in cart
         if (!hasProductInCart) {
           const productWithSameSubcategory = cartItems.find(
-            (item) => item.subcategoryId === product.subcategoryId
-          )
+            (item) => item.subcategoryId === product.subcategoryId,
+          );
 
           if (productWithSameSubcategory) {
             await deleteCartItem({
               productId: productWithSameSubcategory.productId,
-            })
+            });
           }
 
           await addToCart({
             productId: product.id,
             quantity: 1,
-          })
+          });
 
-          toast.success("Added to cart.")
-          return
+          toast.success("Added to cart.");
+          return;
         }
 
         await deleteCartItem({
           productId: product.id,
-        })
-        toast.success("Removed from cart.")
+        });
+        toast.success("Removed from cart.");
       } catch (err) {
-        showErrorToast(err)
+        showErrorToast(err);
       }
     },
-    [cartItems]
-  )
+    [cartItems],
+  );
 
   return (
     <section className="flex flex-col space-y-6">
@@ -165,18 +166,18 @@ export function BoardBuilder({
                 <Switch
                   id={`active-${id}`}
                   checked={active === "true"}
-                  onCheckedChange={(value) =>
+                  onCheckedChange={(value) => {
                     startTransition(() => {
                       router.push(
                         `${pathname}?${createQueryString({
                           active: value ? "true" : "false",
-                        })}`
+                        })}`,
                       ),
                         {
                           scroll: false,
-                        }
-                    })
-                  }
+                        };
+                    });
+                  }}
                   disabled={isPending}
                 />
               </div>
@@ -192,7 +193,7 @@ export function BoardBuilder({
                   step={1}
                   value={priceRange}
                   onValueChange={(value: typeof priceRange) => {
-                    setPriceRange(value)
+                    setPriceRange(value);
                   }}
                 />
                 <div className="flex items-center space-x-4">
@@ -204,8 +205,8 @@ export function BoardBuilder({
                     className="h-9"
                     value={priceRange[0]}
                     onChange={(e) => {
-                      const value = Number(e.target.value)
-                      setPriceRange([value, priceRange[1]])
+                      const value = Number(e.target.value);
+                      setPriceRange([value, priceRange[1]]);
                     }}
                   />
                   <span className="text-muted-foreground">-</span>
@@ -217,8 +218,8 @@ export function BoardBuilder({
                     className="h-9"
                     value={priceRange[1]}
                     onChange={(e) => {
-                      const value = Number(e.target.value)
-                      setPriceRange([priceRange[0], value])
+                      const value = Number(e.target.value);
+                      setPriceRange([priceRange[0], value]);
                     }}
                   />
                 </div>
@@ -240,10 +241,10 @@ export function BoardBuilder({
                         })}`,
                         {
                           scroll: false,
-                        }
-                      )
-                      setPriceRange([0, 100])
-                    })
+                        },
+                      );
+                      setPriceRange([0, 100]);
+                    });
                   }}
                   disabled={isPending}
                 >
@@ -275,9 +276,9 @@ export function BoardBuilder({
                       })}`,
                       {
                         scroll: false,
-                      }
-                    )
-                  })
+                      },
+                    );
+                  });
                 }}
               >
                 {option.label}
@@ -317,5 +318,5 @@ export function BoardBuilder({
         />
       ) : null}
     </section>
-  )
+  );
 }

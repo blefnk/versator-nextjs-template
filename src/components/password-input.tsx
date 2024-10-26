@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { EyeNoneIcon, EyeOpenIcon } from "@radix-ui/react-icons"
+import * as React from "react";
+import { EyeNoneIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Input, type InputProps } from "@/components/ui/input"
+import { cn } from "~/lib/utils";
+import { Button } from "~/components/ui/button";
+import { Input, type InputProps } from "~/components/ui/input";
 
 const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, ...props }, ref) => {
-    const [showPassword, setShowPassword] = React.useState(false)
+    const [showPassword, setShowPassword] = React.useState(false);
 
     return (
       <div className="relative">
@@ -24,7 +24,9 @@ const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
           variant="ghost"
           size="sm"
           className="absolute right-0 top-0 h-full px-3 py-1 hover:bg-transparent"
-          onClick={() => setShowPassword((prev) => !prev)}
+          onClick={() => {
+            setShowPassword((prev) => !prev);
+          }}
           disabled={props.value === "" || props.disabled}
         >
           {showPassword ? (
@@ -37,9 +39,9 @@ const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
           </span>
         </Button>
       </div>
-    )
-  }
-)
-PasswordInput.displayName = "PasswordInput"
+    );
+  },
+);
+PasswordInput.displayName = "PasswordInput";
 
-export { PasswordInput }
+export { PasswordInput };

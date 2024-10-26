@@ -1,19 +1,19 @@
-import type { Metadata } from "next"
-import { env } from "@/env.js"
+import type { Metadata } from "next";
+import { env } from "~/env.js";
 
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/page-header"
-import { Shell } from "@/components/shell"
-import { LogOutButtons } from "@/app/(auth)/_components/logout-buttons"
+} from "~/components/page-header";
+import { Shell } from "~/components/shell";
+import { LogOutButtons } from "~/app/(auth)/_components/logout-buttons";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "Sign out",
   description: "Sign out of your account",
-}
+};
 
 export default function SignOutPage() {
   return (
@@ -26,5 +26,5 @@ export default function SignOutPage() {
       </PageHeader>
       <LogOutButtons />
     </Shell>
-  )
+  );
 }

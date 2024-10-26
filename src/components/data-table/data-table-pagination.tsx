@@ -3,21 +3,21 @@ import {
   ChevronRightIcon,
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
-} from "@radix-ui/react-icons"
-import { type Table } from "@tanstack/react-table"
+} from "@radix-ui/react-icons";
+import { type Table } from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "~/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "~/components/ui/select";
 
 interface DataTablePaginationProps<TData> {
-  table: Table<TData>
-  pageSizeOptions?: number[]
+  table: Table<TData>;
+  pageSizeOptions?: number[];
 }
 
 export function DataTablePagination<TData>({
@@ -36,7 +36,7 @@ export function DataTablePagination<TData>({
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
-              table.setPageSize(Number(value))
+              table.setPageSize(Number(value));
             }}
           >
             <SelectTrigger className="h-8 w-[4.5rem]">
@@ -60,7 +60,9 @@ export function DataTablePagination<TData>({
             aria-label="Go to first page"
             variant="outline"
             className="hidden size-8 p-0 lg:flex"
-            onClick={() => table.setPageIndex(0)}
+            onClick={() => {
+              table.setPageIndex(0);
+            }}
             disabled={!table.getCanPreviousPage()}
           >
             <DoubleArrowLeftIcon className="size-4" aria-hidden="true" />
@@ -70,7 +72,9 @@ export function DataTablePagination<TData>({
             variant="outline"
             size="icon"
             className="size-8"
-            onClick={() => table.previousPage()}
+            onClick={() => {
+              table.previousPage();
+            }}
             disabled={!table.getCanPreviousPage()}
           >
             <ChevronLeftIcon className="size-4" aria-hidden="true" />
@@ -80,7 +84,9 @@ export function DataTablePagination<TData>({
             variant="outline"
             size="icon"
             className="size-8"
-            onClick={() => table.nextPage()}
+            onClick={() => {
+              table.nextPage();
+            }}
             disabled={!table.getCanNextPage()}
           >
             <ChevronRightIcon className="size-4" aria-hidden="true" />
@@ -90,7 +96,9 @@ export function DataTablePagination<TData>({
             variant="outline"
             size="icon"
             className="hidden size-8 lg:flex"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            onClick={() => {
+              table.setPageIndex(table.getPageCount() - 1);
+            }}
             disabled={!table.getCanNextPage()}
           >
             <DoubleArrowRightIcon className="size-4" aria-hidden="true" />
@@ -98,5 +106,5 @@ export function DataTablePagination<TData>({
         </div>
       </div>
     </div>
-  )
+  );
 }

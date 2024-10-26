@@ -1,62 +1,62 @@
-import { type Metadata } from "next"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { db } from "@/db"
-import { orders, stores } from "@/db/schema"
-import { env } from "@/env.js"
-import { and, eq } from "drizzle-orm"
+import { type Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { db } from "~/db";
+import { orders, stores } from "~/db/schema";
+import { env } from "~/env.js";
+import { and, eq } from "drizzle-orm";
 
-import { getOrderLineItems } from "@/lib/actions/order"
-import { formatId, formatPrice } from "@/lib/utils"
+import { getOrderLineItems } from "~/lib/actions/order";
+import { formatId, formatPrice } from "~/lib/utils";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "~/components/ui/card";
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/page-header"
-import { Shell } from "@/components/shell"
+} from "~/components/page-header";
+import { Shell } from "~/components/shell";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "Purchase",
   description: "View your purchase details",
-}
+};
 
 interface PurchasePageProps {
   params: {
-    purchaseId: string
-  }
+    purchaseId: string;
+  };
 }
 
 export default async function PurchasePage({ params }: PurchasePageProps) {
   // Using the purchaseId as the orderId in the sql query
-  const orderId = decodeURIComponent(params.purchaseId)
+  const orderId = decodeURIComponent(params.purchaseId);
 
   const order = await db.query.orders.findFirst({
     where: and(eq(orders.id, orderId), eq(orders.id, orderId)),
-  })
+  });
 
   if (!order) {
-    notFound()
+    notFound();
   }
 
   const orderLineItems = await getOrderLineItems({
     items: String(order.items),
     storeId: order.storeId,
-  })
+  });
 
   const store = await db.query.stores.findFirst({
     columns: {
       name: true,
     },
     where: eq(stores.id, order.storeId),
-  })
+  });
 
   return (
     <Shell variant="sidebar">
@@ -95,7 +95,7 @@ export default async function PurchasePage({ params }: PurchasePageProps) {
                 <div className="flex flex-col space-y-1 font-medium">
                   <span className="ml-auto line-clamp-1 text-sm">
                     {formatPrice(
-                      (Number(item.price) * item.quantity).toFixed(2)
+                      (Number(item.price) * item.quantity).toFixed(2),
                     )}
                   </span>
                   <span className="line-clamp-1 text-xs text-muted-foreground">
@@ -108,5 +108,5 @@ export default async function PurchasePage({ params }: PurchasePageProps) {
         </CardContent>
       </Card>
     </Shell>
-  )
+  );
 }

@@ -1,23 +1,23 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import type { StoredFile } from "@/types"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
+import * as React from "react";
+import type { StoredFile } from "~/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-import { addProduct } from "@/lib/actions/product"
-import { getErrorMessage } from "@/lib/handle-error"
+import { addProduct } from "~/lib/actions/product";
+import { getErrorMessage } from "~/lib/handle-error";
 import {
   type getCategories,
   type getSubcategories,
-} from "@/lib/queries/product"
+} from "~/lib/queries/product";
 import {
   createProductSchema,
   type CreateProductSchema,
-} from "@/lib/validations/product"
-import { useUploadFile } from "@/hooks/use-upload-file"
-import { Button } from "@/components/ui/button"
+} from "~/lib/validations/product";
+import { useUploadFile } from "~/hooks/use-upload-file";
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -25,7 +25,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "~/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -33,8 +33,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -42,29 +42,29 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { FileUploader } from "@/components/file-uploader"
-import { Files } from "@/components/files"
-import { Icons } from "@/components/icons"
+} from "~/components/ui/select";
+import { Textarea } from "~/components/ui/textarea";
+import { FileUploader } from "~/components/file-uploader";
+import { Files } from "~/components/files";
+import { Icons } from "~/components/icons";
 
 interface CreateProductFormProps {
-  storeId: string
+  storeId: string;
   promises: Promise<{
-    categories: Awaited<ReturnType<typeof getCategories>>
-    subcategories: Awaited<ReturnType<typeof getSubcategories>>
-  }>
+    categories: Awaited<ReturnType<typeof getCategories>>;
+    subcategories: Awaited<ReturnType<typeof getSubcategories>>;
+  }>;
 }
 
 export function CreateProductForm({
   storeId,
   promises,
 }: CreateProductFormProps) {
-  const { categories, subcategories } = React.use(promises)
+  const { categories, subcategories } = React.use(promises);
 
-  const [loading, setLoading] = React.useState(false)
+  const [loading, setLoading] = React.useState(false);
   const { uploadFiles, progresses, uploadedFiles, isUploading } =
-    useUploadFile("productImage")
+    useUploadFile("productImage");
 
   const form = useForm<CreateProductSchema>({
     resolver: zodResolver(createProductSchema),
@@ -77,10 +77,10 @@ export function CreateProductForm({
       subcategoryId: "",
       images: [],
     },
-  })
+  });
 
   function onSubmit(input: CreateProductSchema) {
-    setLoading(true)
+    setLoading(true);
 
     toast.promise(
       uploadFiles(input.images ?? []).then(() => {
@@ -88,21 +88,21 @@ export function CreateProductForm({
           ...input,
           storeId,
           images: JSON.stringify(uploadedFiles) as unknown as StoredFile[],
-        })
+        });
       }),
       {
         loading: "Adding product...",
         success: () => {
-          form.reset()
-          setLoading(false)
-          return "Product"
+          form.reset();
+          setLoading(false);
+          return "Product";
         },
         error: (err) => {
-          setLoading(false)
-          return getErrorMessage(err)
+          setLoading(false);
+          return getErrorMessage(err);
         },
-      }
-    )
+      },
+    );
   }
 
   return (
@@ -149,9 +149,9 @@ export function CreateProductForm({
                 <FormLabel>Category</FormLabel>
                 <Select
                   value={field.value}
-                  onValueChange={(value: typeof field.value) =>
-                    field.onChange(value)
-                  }
+                  onValueChange={(value: typeof field.value) => {
+                    field.onChange(value);
+                  }}
                 >
                   <FormControl>
                     <SelectTrigger className="capitalize">
@@ -236,7 +236,9 @@ export function CreateProductForm({
                     inputMode="numeric"
                     placeholder="Type product inventory here."
                     value={Number.isNaN(field.value) ? "" : field.value}
-                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    onChange={(e) => {
+                      field.onChange(e.target.valueAsNumber);
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -331,5 +333,5 @@ export function CreateProductForm({
         </Button>
       </form>
     </Form>
-  )
+  );
 }

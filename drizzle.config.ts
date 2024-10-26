@@ -1,11 +1,22 @@
-import { env } from "@/env.js"
-import { type Config } from "drizzle-kit"
+import { config } from "dotenv";
+import { defineConfig } from "drizzle-kit";
 
-export default {
-  schema: "./src/db/schema/index.ts",
-  dialect: "postgresql",
-  out: "./drizzle",
+config({ path: ".env" });
+
+const dbPrefix = process.env.NEXT_PUBLIC_DATABASE_PREFIX || "relivator";
+
+export default defineConfig({
   dbCredentials: {
-    url: env.DATABASE_URL,
+    url: process.env.DATABASE_URL || "",
   },
-} satisfies Config
+  dialect: "postgresql",
+  migrations: {
+    schema: "public",
+    table: `drizzle/${dbPrefix}/pgsql`,
+  },
+  out: `drizzle/${dbPrefix}/pgsql`,
+  schema: "src/db/schema/index.ts",
+  strict: true,
+  tablesFilter: [`${dbPrefix}_*`],
+  verbose: false,
+});

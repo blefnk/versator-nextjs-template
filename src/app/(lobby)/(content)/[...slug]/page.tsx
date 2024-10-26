@@ -1,54 +1,53 @@
-import { notFound } from "next/navigation"
-import { allPages } from "contentlayer/generated"
+import { notFound } from "next/navigation";
 
-import "@/styles/mdx.css"
+import "~/styles/mdx.css";
 
-import { type Metadata } from "next"
+import { type Metadata } from "next";
 
-import { siteConfig } from "@/config/site"
-import { absoluteUrl } from "@/lib/utils"
-import { Separator } from "@/components/ui/separator"
-import { Mdx } from "@/components/mdx/mdx-components"
-import { MdxPager } from "@/components/mdx/mdx-pager"
+import { siteConfig } from "~/config/site";
+import { absoluteUrl } from "~/lib/utils";
+import { Separator } from "~/components/ui/separator";
+import { allPages, Mdx } from "~/mdx-components";
+import { MdxPager } from "~/components/mdx/mdx-pager";
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/page-header"
-import { Shell } from "@/components/shell"
+} from "~/components/page-header";
+import { Shell } from "~/components/shell";
 
 interface PageProps {
   params: {
-    slug: string[]
-  }
+    slug: string[];
+  };
 }
 
 function getPageFromParams(params: PageProps["params"]) {
-  const slug = params?.slug?.join("/") ?? ""
+  const slug = params.slug.join("/") ?? "";
   const page = allPages.find(
-    (page: { slugAsParams: string }) => page.slugAsParams === slug
-  )
+    (page: { slugAsParams: string }) => page.slugAsParams === slug,
+  );
 
   if (!page) {
-    null
+    null;
   }
 
-  return page
+  return page;
 }
 
 export function generateMetadata({ params }: PageProps): Metadata {
-  const page = getPageFromParams(params)
+  const page = getPageFromParams(params);
 
   if (!page) {
-    return {}
+    return {};
   }
 
-  const url = absoluteUrl("/")
+  const url = absoluteUrl("/");
 
-  const ogUrl = new URL(`${url}/api/og`)
-  ogUrl.searchParams.set("title", page.title)
-  ogUrl.searchParams.set("type", siteConfig.name)
-  ogUrl.searchParams.set("mode", "light")
+  const ogUrl = new URL(`${url}/api/og`);
+  ogUrl.searchParams.set("title", page.title);
+  ogUrl.searchParams.set("type", siteConfig.name);
+  ogUrl.searchParams.set("mode", "light");
 
   return {
     title: page.title,
@@ -57,7 +56,7 @@ export function generateMetadata({ params }: PageProps): Metadata {
       title: page.title,
       description: page.description,
       type: "article",
-      url: absoluteUrl(page.slug),
+      url: absoluteUrl(page.slugAsParams),
       images: [
         {
           url: ogUrl.toString(),
@@ -73,32 +72,32 @@ export function generateMetadata({ params }: PageProps): Metadata {
       description: page.description,
       images: [ogUrl.toString()],
     },
-  }
+  };
 }
 
 export function generateStaticParams(): PageProps["params"][] {
   return allPages.map((page) => ({
     slug: page.slugAsParams.split("/"),
-  }))
+  }));
 }
 
 export default function Page({ params }: PageProps) {
-  const page = getPageFromParams(params)
+  const page = getPageFromParams(params);
 
   if (!page) {
-    notFound()
+    notFound();
   }
 
   // Remove the /pages prefix from the slug
   const formattedPage = {
     ...page,
-    slug: page.slug.replace(/^\/pages/, ""),
-  }
+    slug: page.slugAsParams.replace(/^\/pages/, ""),
+  };
 
   const formattedPages = allPages.map((page) => ({
     ...page,
-    slug: page.slug.replace(/^\/pages/, ""),
-  }))
+    slug: page.slugAsParams.replace(/^\/pages/, ""),
+  }));
 
   return (
     <Shell as="article" variant="markdown">
@@ -114,5 +113,5 @@ export default function Page({ params }: PageProps) {
         className="my-4"
       />
     </Shell>
-  )
+  );
 }

@@ -1,16 +1,16 @@
-import { db } from "@/db"
-import { notifications } from "@/db/schema"
-import { env } from "@/env.js"
-import { currentUser } from "@clerk/nextjs/server"
-import { eq } from "drizzle-orm"
-import { z } from "zod"
+import { db } from "~/db";
+import { notifications } from "~/db/schema";
+import { env } from "~/env.js";
+import { currentUser } from "@clerk/nextjs/server";
+import { eq } from "drizzle-orm";
+import { z } from "zod";
 
-import { resend } from "@/lib/resend"
-import { joinNewsletterSchema } from "@/lib/validations/notification"
-import NewsletterWelcomeEmail from "@/components/emails/newsletter-welcome-email"
+import { resend } from "~/lib/resend";
+import { joinNewsletterSchema } from "~/lib/validations/notification";
+import NewsletterWelcomeEmail from "~/components/emails/newsletter-welcome-email";
 
 export async function POST(req: Request) {
-  const input = joinNewsletterSchema.parse(await req.json())
+  const input = joinNewsletterSchema.parse(await req.json());
 
   try {
     const notification = await db
@@ -23,29 +23,30 @@ export async function POST(req: Request) {
       .from(notifications)
       .where(eq(notifications.email, input.email))
       .execute()
-      .then((res) => res[0])
+      .then((res) => res[0]);
 
     if (notification?.newsletter) {
       return new Response("You are already subscribed to the newsletter.", {
         status: 409,
-      })
+      });
     }
 
-    const user = await currentUser()
+    const user = await currentUser();
 
     await Promise.all([
       resend.emails.send({
-        from: env.EMAIL_FROM_ADDRESS,
+        from: env.EMAIL_FROM_ADDRESS || "",
         to: input.email,
         subject: input.subject ?? "Welcome to TrendsAI",
         react: NewsletterWelcomeEmail({
           firstName: user?.firstName ?? "",
-          fromEmail: env.EMAIL_FROM_ADDRESS,
+          fromEmail: env.EMAIL_FROM_ADDRESS || "",
           token: notification?.token ?? input.token,
         }),
       }),
       db
         .insert(notifications)
+        // @ts-expect-error TODO: fix ts
         .values({
           email: input.email,
           token: input.token,
@@ -54,23 +55,24 @@ export async function POST(req: Request) {
         .onConflictDoUpdate({
           target: [notifications.email],
           set: {
+            // @ts-expect-error TODO: fix ts
             newsletter: true,
           },
         }),
-    ])
+    ]);
 
-    return new Response(null, { status: 200 })
+    return new Response(null, { status: 200 });
   } catch (error) {
-    console.error(error)
+    console.error(error);
 
     if (error instanceof z.ZodError) {
-      return new Response(error.message, { status: 422 })
+      return new Response(error.message, { status: 422 });
     }
 
     if (error instanceof Error) {
-      return new Response(error.message, { status: 500 })
+      return new Response(error.message, { status: 500 });
     }
 
-    return new Response("Something went wrong", { status: 500 })
+    return new Response("Something went wrong", { status: 500 });
   }
 }

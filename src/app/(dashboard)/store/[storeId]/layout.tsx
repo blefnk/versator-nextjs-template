@@ -1,37 +1,37 @@
-import * as React from "react"
-import { redirect } from "next/navigation"
+import * as React from "react";
+import { redirect } from "next/navigation";
 
-import { getStoresByUserId } from "@/lib/queries/store"
-import { getCachedUser, getUserPlanMetrics } from "@/lib/queries/user"
-import { Skeleton } from "@/components/ui/skeleton"
+import { getStoresByUserId } from "~/lib/queries/store";
+import { getCachedUser, getUserPlanMetrics } from "~/lib/queries/user";
+import { Skeleton } from "~/components/ui/skeleton";
 
-import { SidebarProvider } from "../../../../components/layouts/sidebar-provider"
-import { DashboardHeader } from "./_components/dashboard-header"
-import { DashboardSidebar } from "./_components/dashboard-sidebar"
-import { DashboardSidebarSheet } from "./_components/dashboard-sidebar-sheet"
-import { StoreSwitcher } from "./_components/store-switcher"
+import { SidebarProvider } from "../../../../components/layouts/sidebar-provider";
+import { DashboardHeader } from "./_components/dashboard-header";
+import { DashboardSidebar } from "./_components/dashboard-sidebar";
+import { DashboardSidebarSheet } from "./_components/dashboard-sidebar-sheet";
+import { StoreSwitcher } from "./_components/store-switcher";
 
 interface DashboardStoreLayoutProps {
   params: {
-    storeId: string
-  }
-  children: React.ReactNode
+    storeId: string;
+  };
+  children: React.ReactNode;
 }
 
 export default async function DashboardStoreLayout({
   children,
   params,
 }: DashboardStoreLayoutProps) {
-  const storeId = decodeURIComponent(params.storeId)
+  const storeId = decodeURIComponent(params.storeId);
 
-  const user = await getCachedUser()
+  const user = await getCachedUser();
 
   if (!user) {
-    redirect("/signin")
+    redirect("/signin");
   }
 
-  const storesPromise = getStoresByUserId({ userId: user.id })
-  const planMetricsPromise = getUserPlanMetrics({ userId: user.id })
+  const storesPromise = getStoresByUserId({ userId: user.id });
+  const planMetricsPromise = getUserPlanMetrics({ userId: user.id });
 
   return (
     <SidebarProvider>
@@ -66,5 +66,5 @@ export default async function DashboardStoreLayout({
         </div>
       </div>
     </SidebarProvider>
-  )
+  );
 }

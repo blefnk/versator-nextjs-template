@@ -1,21 +1,21 @@
-import type { Metadata } from "next"
-import { notFound } from "next/navigation"
-import { db } from "@/db"
-import { stores } from "@/db/schema"
-import { env } from "@/env.js"
-import type { SearchParams } from "@/types"
-import { format } from "date-fns"
-import { eq } from "drizzle-orm"
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { db } from "~/db";
+import { stores } from "~/db/schema";
+import { env } from "~/env.js";
+import type { SearchParams } from "~/types";
+import { format } from "date-fns";
+import { eq } from "drizzle-orm";
 
 import {
   getCustomers,
   getOrderCount,
   getSaleCount,
   getSales,
-} from "@/lib/actions/order"
-import { cn, formatNumber, formatPrice } from "@/lib/utils"
-import { searchParamsSchema } from "@/lib/validations/params"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+} from "~/lib/actions/order";
+import { cn, formatNumber, formatPrice } from "~/lib/utils";
+import { searchParamsSchema } from "~/lib/validations/params";
+import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import {
   Card,
   CardContent,
@@ -23,50 +23,50 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "~/components/ui/card";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"
-import { DateRangePicker } from "@/components/date-range-picker"
+} from "~/components/ui/pagination";
+import { DateRangePicker } from "~/components/date-range-picker";
 
-import { OverviewCard } from "./_components/overview-card"
-import { SalesChart } from "./_components/sales-chart"
+import { OverviewCard } from "./_components/overview-card";
+import { SalesChart } from "./_components/sales-chart";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "Analytics",
   description: "Analytics for your store",
-}
+};
 
 interface AnalyticsPageProps {
   params: {
-    storeId: string
-  }
-  searchParams: SearchParams
+    storeId: string;
+  };
+  searchParams: SearchParams;
 }
 
 export default async function AnalyticsPage({
   params,
   searchParams,
 }: AnalyticsPageProps) {
-  const storeId = decodeURIComponent(params.storeId)
+  const storeId = decodeURIComponent(params.storeId);
 
   const { page, from, to } = searchParamsSchema
     .omit({ per_page: true, sort: true })
-    .parse(searchParams)
+    .parse(searchParams);
 
-  const fromDay = from ? new Date(from) : undefined
-  const toDay = to ? new Date(to) : undefined
+  const fromDay = from ? new Date(from) : undefined;
+  const toDay = to ? new Date(to) : undefined;
   const dayCount =
     fromDay && toDay
       ? Math.round(
-          (toDay.getTime() - fromDay.getTime()) / (1000 * 60 * 60 * 24)
+          (toDay.getTime() - fromDay.getTime()) / (1000 * 60 * 60 * 24),
         )
-      : undefined
+      : undefined;
 
   const store = await db.query.stores.findFirst({
     where: eq(stores.id, storeId),
@@ -75,29 +75,29 @@ export default async function AnalyticsPage({
       name: true,
       description: true,
     },
-  })
+  });
 
   if (!store) {
-    notFound()
+    notFound();
   }
 
   const orderCountPromise = getOrderCount({
     storeId,
     fromDay: fromDay,
     toDay: toDay,
-  })
+  });
 
   const saleCountPromise = getSaleCount({
     storeId,
     fromDay: fromDay,
     toDay: toDay,
-  })
+  });
 
   const salesPromise = getSales({
     storeId,
     fromDay: fromDay,
     toDay: toDay,
-  })
+  });
 
   const customersPromise = getCustomers({
     storeId,
@@ -105,7 +105,7 @@ export default async function AnalyticsPage({
     offset: (page - 1) * 5,
     fromDay: fromDay,
     toDay: toDay,
-  })
+  });
 
   const [saleCount, orderCount, sales, { customers, customerCount }] =
     await Promise.all([
@@ -113,7 +113,7 @@ export default async function AnalyticsPage({
       orderCountPromise,
       salesPromise,
       customersPromise,
-    ])
+    ]);
 
   return (
     <div className="space-y-6 p-1">
@@ -184,7 +184,7 @@ export default async function AnalyticsPage({
                 <div className="flex flex-1 flex-col gap-4 sm:flex-row sm:items-center">
                   <Avatar className="size-9">
                     <AvatarFallback>
-                      {customer.name?.slice(0, 2).toUpperCase()}
+                      {customer.name.slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div className="w-full space-y-1 text-sm">
@@ -209,7 +209,7 @@ export default async function AnalyticsPage({
                     scroll={false}
                     className={cn(
                       "transition-opacity",
-                      page === 1 && "pointer-events-none opacity-50"
+                      page === 1 && "pointer-events-none opacity-50",
                     )}
                   />
                 </PaginationItem>
@@ -220,7 +220,7 @@ export default async function AnalyticsPage({
                     className={cn(
                       "transition-opacity",
                       Math.ceil(customerCount / 5) === page &&
-                        "pointer-events-none opacity-50"
+                        "pointer-events-none opacity-50",
                     )}
                   />
                 </PaginationItem>
@@ -230,5 +230,5 @@ export default async function AnalyticsPage({
         </Card>
       </div>
     </div>
-  )
+  );
 }

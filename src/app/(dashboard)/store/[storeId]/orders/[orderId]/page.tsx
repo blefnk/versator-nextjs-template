@@ -1,50 +1,50 @@
-import { type Metadata } from "next"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { db } from "@/db"
-import { orders, products } from "@/db/schema"
-import { env } from "@/env.js"
-import { and, eq } from "drizzle-orm"
+import { type Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { db } from "~/db";
+import { orders, products } from "~/db/schema";
+import { env } from "~/env.js";
+import { and, eq } from "drizzle-orm";
 
-import { getOrderLineItems } from "@/lib/actions/order"
-import { formatId, formatPrice } from "@/lib/utils"
+import { getOrderLineItems } from "~/lib/actions/order";
+import { formatId, formatPrice } from "~/lib/utils";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "~/components/ui/card";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "Order",
   description: "View your order details",
-}
+};
 
 interface OrderPageProps {
   params: {
-    storeId: string
-    orderId: string
-  }
+    storeId: string;
+    orderId: string;
+  };
 }
 
 export default async function OrderPage({ params }: OrderPageProps) {
-  const storeId = decodeURIComponent(params.storeId)
-  const orderId = decodeURIComponent(params.orderId)
+  const storeId = decodeURIComponent(params.storeId);
+  const orderId = decodeURIComponent(params.orderId);
 
   const order = await db.query.orders.findFirst({
     where: and(eq(orders.id, orderId), eq(products.storeId, storeId)),
-  })
+  });
 
   if (!order) {
-    notFound()
+    notFound();
   }
 
   const orderLineItems = await getOrderLineItems({
     items: String(order.items),
     storeId: order.storeId,
-  })
+  });
 
   return (
     <Card>
@@ -86,5 +86,5 @@ export default async function OrderPage({ params }: OrderPageProps) {
         ))}
       </CardContent>
     </Card>
-  )
+  );
 }

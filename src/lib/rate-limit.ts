@@ -1,5 +1,5 @@
-import { Ratelimit } from "@upstash/ratelimit" // for deno: see above
-import { Redis } from "@upstash/redis" // see below for cloudflare and fastly adapters
+import { Ratelimit } from "@upstash/ratelimit"; // for deno: see above
+import { Redis } from "@upstash/redis"; // see below for cloudflare and fastly adapters
 
 export const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
@@ -11,5 +11,5 @@ export const ratelimit = new Ratelimit({
    * instance with other applications and want to avoid key collisions. The default prefix is
    * "@upstash/ratelimit"
    */
-  prefix: "skateshop/ratelimit",
-})
+  prefix: "versator/ratelimit",
+});

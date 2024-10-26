@@ -1,6 +1,11 @@
-import { cn } from "@/lib/utils"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
+import { cn } from "~/lib/utils";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "~/components/ui/card";
+import { Skeleton } from "~/components/ui/skeleton";
 
 export function BillingSkeleton() {
   return (
@@ -59,5 +64,5 @@ export function BillingSkeleton() {
         ))}
       </section>
     </>
-  )
+  );
 }

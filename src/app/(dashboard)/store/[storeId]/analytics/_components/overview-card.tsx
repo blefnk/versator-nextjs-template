@@ -1,12 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Icons } from "@/components/icons"
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Icons } from "~/components/icons";
 
 interface OverviewCardProps {
-  title: string
-  value: string
-  description: string
-  icon: keyof typeof Icons
+  title: string;
+  value: string;
+  description: string;
+  icon: keyof typeof Icons;
 }
 
 export function OverviewCard({
@@ -15,7 +15,7 @@ export function OverviewCard({
   description,
   icon,
 }: OverviewCardProps) {
-  const Icon = Icons[icon]
+  const Icon = Icons[icon];
 
   return (
     <Card>
@@ -30,7 +30,7 @@ export function OverviewCard({
         )}
       </CardContent>
     </Card>
-  )
+  );
 }
 
 export function OverviewCardSkeleton() {
@@ -45,5 +45,5 @@ export function OverviewCardSkeleton() {
         <Skeleton className="h-4 w-40" />
       </CardContent>
     </Card>
-  )
+  );
 }

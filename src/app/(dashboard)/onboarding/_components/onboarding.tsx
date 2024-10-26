@@ -1,22 +1,22 @@
 // @see https://github.com/juliusmarminge/acme-corp/blob/main/apps/nextjs/src/app/(dashboard)/onboarding/multi-step-form.tsx
 
-"use client"
+"use client";
 
-import { useSearchParams } from "next/navigation"
-import { AnimatePresence } from "framer-motion"
+import { useSearchParams } from "next/navigation";
+import { AnimatePresence } from "framer-motion";
 
-import { ConnectStripe } from "./connect-stripe"
-import { CreateStore } from "./create-store"
-import { Intro } from "./intro"
+import { ConnectStripe } from "./connect-stripe";
+import { CreateStore } from "./create-store";
+import { Intro } from "./intro";
 
 interface OnboardingProps {
-  userId: string
+  userId: string;
 }
 
 export function Onboarding({ userId }: OnboardingProps) {
-  const search = useSearchParams()
-  const step = search.get("step")
-  const storeId = search.get("store")
+  const search = useSearchParams();
+  const step = search.get("step");
+  const storeId = search.get("store");
 
   return (
     <AnimatePresence mode="wait">
@@ -24,5 +24,5 @@ export function Onboarding({ userId }: OnboardingProps) {
       {step === "create" && <CreateStore userId={userId} />}
       {step === "connect" && <ConnectStripe storeId={storeId} />}
     </AnimatePresence>
-  )
+  );
 }

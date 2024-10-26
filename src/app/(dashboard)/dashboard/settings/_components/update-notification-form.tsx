@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
+import * as React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-import { updateNotification } from "@/lib/actions/notification"
-import { type getNotification } from "@/lib/queries/notification"
+import { updateNotification } from "~/lib/actions/notification";
+import { type getNotification } from "~/lib/queries/notification";
 import {
   updateNotificationSchema,
   type UpdateNotificationSchema,
-} from "@/lib/validations/notification"
-import { Button } from "@/components/ui/button"
+} from "~/lib/validations/notification";
+import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -20,19 +20,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Switch } from "@/components/ui/switch"
-import { Icons } from "@/components/icons"
+} from "~/components/ui/form";
+import { Switch } from "~/components/ui/switch";
+import { Icons } from "~/components/icons";
 
 interface UpdateNotificationFormProps {
-  notificationPromise: ReturnType<typeof getNotification>
+  notificationPromise: ReturnType<typeof getNotification>;
 }
 
 export function UpdateNotificationForm({
   notificationPromise,
 }: UpdateNotificationFormProps) {
-  const notification = React.use(notificationPromise)
-  const [loading, setLoading] = React.useState(false)
+  const notification = React.use(notificationPromise);
+  const [loading, setLoading] = React.useState(false);
 
   const form = useForm<UpdateNotificationSchema>({
     resolver: zodResolver(updateNotificationSchema),
@@ -41,24 +41,24 @@ export function UpdateNotificationForm({
       newsletter: notification?.newsletter,
       marketing: notification?.marketing,
     },
-  })
+  });
 
   async function onSubmit(input: UpdateNotificationSchema) {
-    setLoading(true)
+    setLoading(true);
     const { error } = await updateNotification({
       token: input.token,
       newsletter: input.newsletter,
       communication: input.communication,
       marketing: input.marketing,
-    })
+    });
 
     if (error) {
-      toast.error(error)
-      return
+      toast.error(error);
+      return;
     }
 
-    toast.success("Preferences updated")
-    setLoading(false)
+    toast.success("Preferences updated");
+    setLoading(false);
   }
 
   return (
@@ -147,5 +147,5 @@ export function UpdateNotificationForm({
         </Button>
       </form>
     </Form>
-  )
+  );
 }

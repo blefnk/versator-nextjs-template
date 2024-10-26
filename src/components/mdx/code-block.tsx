@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { CheckIcon, CopyIcon } from "@radix-ui/react-icons"
+import * as React from "react";
+import { CheckIcon, CopyIcon } from "@radix-ui/react-icons";
 
-import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Icons } from "@/components/icons"
+import { Button } from "~/components/ui/button";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Icons } from "~/components/icons";
 
 interface CodeBlockProps extends React.HTMLProps<HTMLPreElement> {
   // set by `rehype-pretty-code`
-  "data-language"?: string
+  "data-language"?: string;
   // set by `rehype-pretty-code`
-  "data-theme"?: string
+  "data-theme"?: string;
 }
 
 export function CodeBlock({ children, ...props }: CodeBlockProps) {
-  const language = props["data-language"] as string
-  const theme = props["data-theme"] as string
+  const language = props["data-language"];
+  const theme = props["data-theme"];
   const Icon = {
     js: Icons.javascript,
     ts: Icons.typescript,
     bash: Icons.bash,
-  }[language]
+  }[language];
 
-  const ref = React.useRef<HTMLSpanElement>(null)
-  const [isCopied, setIsCopied] = React.useState(false)
+  const ref = React.useRef<HTMLSpanElement>(null);
+  const [isCopied, setIsCopied] = React.useState(false);
 
   return (
     <pre
@@ -50,12 +50,14 @@ export function CodeBlock({ children, ...props }: CodeBlockProps) {
         size="icon"
         className="size-6 hover:bg-zinc-200 hover:text-zinc-900 dark:hover:bg-zinc-700 dark:hover:text-zinc-50"
         onClick={() => {
-          if (typeof window === "undefined") return
-          setIsCopied(true)
+          if (typeof window === "undefined") return;
+          setIsCopied(true);
           void window.navigator.clipboard.writeText(
-            ref.current?.innerText ?? ""
-          )
-          setTimeout(() => setIsCopied(false), 2000)
+            ref.current?.innerText ?? "",
+          );
+          setTimeout(() => {
+            setIsCopied(false);
+          }, 2000);
         }}
       >
         {isCopied ? (
@@ -68,5 +70,5 @@ export function CodeBlock({ children, ...props }: CodeBlockProps) {
         </span>
       </Button>
     </pre>
-  )
+  );
 }

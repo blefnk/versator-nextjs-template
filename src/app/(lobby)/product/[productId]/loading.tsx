@@ -1,10 +1,10 @@
-import { cn } from "@/lib/utils"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Icons } from "@/components/icons"
-import { ProductCardSkeleton } from "@/components/product-card-skeleton"
-import { Shell } from "@/components/shell"
+import { cn } from "~/lib/utils";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { Separator } from "~/components/ui/separator";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Icons } from "~/components/icons";
+import { ProductCardSkeleton } from "~/components/product-card-skeleton";
+import { Shell } from "~/components/shell";
 
 export default function ProductLoading() {
   return (
@@ -86,5 +86,5 @@ export default function ProductLoading() {
         </ScrollArea>
       </div>
     </Shell>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import Image from "next/image"
-import type { StoredFile } from "@/types"
+import Image from "next/image";
+import type { StoredFile } from "~/types";
 
 import {
   Card,
@@ -7,12 +7,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { EmptyCard } from "@/components/empty-card"
+} from "~/components/ui/card";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
+import { EmptyCard } from "~/components/empty-card";
 
 interface FilesProps {
-  files: StoredFile[]
+  files: StoredFile[];
 }
 
 export function Files({ files }: FilesProps) {
@@ -50,5 +50,5 @@ export function Files({ files }: FilesProps) {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,12 +1,12 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
-import { JoinNewsletterForm } from "@/components/join-newsletter-form"
-import { ModeToggle } from "@/components/layouts/mode-toggle"
-import { Shell } from "@/components/shell"
+import { siteConfig } from "~/config/site";
+import { cn } from "~/lib/utils";
+import { buttonVariants } from "~/components/ui/button";
+import { Icons } from "~/components/icons";
+import { JoinNewsletterForm } from "~/components/join-newsletter-form";
+import { ModeToggle } from "~/components/layouts/mode-toggle";
+import { Shell } from "~/components/shell";
 
 export function SiteFooter() {
   return (
@@ -29,8 +29,8 @@ export function SiteFooter() {
                     <li key={link.title}>
                       <Link
                         href={link.href}
-                        target={link?.external ? "_blank" : undefined}
-                        rel={link?.external ? "noreferrer" : undefined}
+                        target={link.external ? "_blank" : undefined}
+                        rel={link.external ? "noreferrer" : undefined}
                         className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                       >
                         {link.title}
@@ -53,12 +53,12 @@ export function SiteFooter() {
           <div className="flex-1 text-left text-sm leading-loose text-muted-foreground">
             Built by{" "}
             <Link
-              href="https://twitter.com/sadmann17"
+              href="https://twitter.com/blefnk"
               target="_blank"
               rel="noreferrer"
               className="font-semibold transition-colors hover:text-foreground"
             >
-              Sadman
+              blefnk
               <span className="sr-only">Twitter</span>
             </Link>
             .
@@ -72,7 +72,7 @@ export function SiteFooter() {
                 buttonVariants({
                   size: "icon",
                   variant: "ghost",
-                })
+                }),
               )}
             >
               <Icons.gitHub className="size-4" aria-hidden="true" />
@@ -83,5 +83,5 @@ export function SiteFooter() {
         </section>
       </Shell>
     </footer>
-  )
+  );
 }
